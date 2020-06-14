@@ -1,0 +1,281 @@
+html {
+  font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  padding-top: 10px;
+  font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #2c3e50;
+  background-color: #ffffff;
+}
+hr.new2 {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  margin-top: 13px;
+  border-top: 1px solid;
+  color: #283747;
+}
+hr.new3 {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border-top: 1px dashed;
+  color: #283747;
+}
+a {
+  color: #006699;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  color: #0099CC;
+  text-decoration: underline;
+}
+a:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+hr {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border: 0;
+  border-top: 1px solid #ecf0f1;
+}
+
+.alert-warning {
+    background-color: #f0ad4e;
+	border-color: transparent;
+	color: #fff;
+}
+.alert {
+    padding: 12px;
+    margin-bottom: 7px;
+    border: 1px solid transparent;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+    border-radius: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.1;
+  color: inherit;
+}
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small,
+.h1 small,
+.h2 small,
+.h3 small,
+.h4 small,
+.h5 small,
+.h6 small,
+h1 .small,
+h2 .small,
+h3 .small,
+h4 .small,
+h5 .small,
+h6 .small,
+.h1 .small,
+.h2 .small,
+.h3 .small,
+.h4 .small,
+.h5 .small,
+.h6 .small {
+  font-weight: normal;
+  line-height: 1;
+  color: #000;
+}
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3 {
+  margin-top: 1px;
+  margin-bottom: 17px;
+}
+h1 small,
+.h1 small,
+h2 small,
+.h2 small,
+h3 small,
+.h3 small,
+h1 .small,
+.h1 .small,
+h2 .small,
+.h2 .small,
+h3 .small,
+.h3 .small {
+  font-size: 65%;
+}
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  margin-top: 10.5px;
+  margin-bottom: 10.5px;
+}
+h4 small,
+.h4 small,
+h5 small,
+.h5 small,
+h6 small,
+.h6 small,
+h4 .small,
+.h4 .small,
+h5 .small,
+.h5 .small,
+h6 .small,
+.h6 .small {
+  font-size: 75%;
+}
+h1,
+.h1 {
+  font-size: 39px;
+}
+h2,
+.h2 {
+  margin-top: 12px;
+  font-size: 34px;
+}
+h3,
+.h3 {
+  font-size: 26px;
+}
+h4,
+.h4 {
+  font-size: 19px;
+}
+h5,
+.h5 {
+  font-size: 15px;
+}
+h6,
+.h6 {
+  font-size: 13px;
+}
+table {
+    font-size: 13px;
+}
+table > thead > tr > th,
+.table > thead > tr > th,
+table > tbody > tr > th,
+.table > tbody > tr > th,
+table > tfoot > tr > th,
+.table > tfoot > tr > th,
+table > thead > tr > td,
+.table > thead > tr > td,
+table > tbody > tr > td,
+.table > tbody > tr > td,
+table > tfoot > tr > td,
+.table > tfoot > tr > td {
+  border: none;
+}
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
+  padding: 3px;
+}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: 
+    #f9f9f9;
+}
+table {
+  counter-reset: section;
+}
+
+.count:before {
+  counter-increment: section;
+  content: counter(section);
+}
+small, .small {
+    font-size: 86%;
+}
+.pull-right {
+    float: right !important;
+}
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #ecf0f1;
+	border: 1px solid transparent;
+    border-radius: 1px;
+}
+.well-sm {
+    padding: 9px;
+    border-radius: 1px;
+}
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.vid {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+.vid iframe, .vid object, .vid embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+iframe {
+    border: 1px 
+    black solid;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1180px;
+  }
+}
+@media (min-width: 1200px) {
+  .container, .container-sm, .container-md, .container-lg, .container-xl {
+    max-width: 1180px;
+  }
+}
