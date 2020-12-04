@@ -56,59 +56,8 @@ hr {
 .alert {
     padding: 12px;
     margin-bottom: 7px;
-    border: 1px solid transparent;
-	border-top-color: transparent;
-	border-right-color: transparent;
-	border-bottom-color: transparent;
-	border-left-color: transparent;
-    border-radius: 0px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.1;
-  color: inherit;
-}
-h1 small,
-h2 small,
-h3 small,
-h4 small,
-h5 small,
-h6 small,
-.h1 small,
-.h2 small,
-.h3 small,
-.h4 small,
-.h5 small,
-.h6 small,
-h1 .small,
-h2 .small,
-h3 .small,
-h4 .small,
-h5 .small,
-h6 .small,
-.h1 .small,
-.h2 .small,
-.h3 .small,
-.h4 .small,
-.h5 .small,
-.h6 .small {
-  font-weight: normal;
-  line-height: 1;
-  color: #000;
-}
 h1,
 .h1,
 h2,
@@ -118,20 +67,6 @@ h3,
   margin-top: 1px;
   margin-bottom: 17px;
 }
-h1 small,
-.h1 small,
-h2 small,
-.h2 small,
-h3 small,
-.h3 small,
-h1 .small,
-.h1 .small,
-h2 .small,
-.h2 .small,
-h3 .small,
-.h3 .small {
-  font-size: 65%;
-}
 h4,
 .h4,
 h5,
@@ -140,20 +75,6 @@ h6,
 .h6 {
   margin-top: 10.5px;
   margin-bottom: 10.5px;
-}
-h4 small,
-.h4 small,
-h5 small,
-.h5 small,
-h6 small,
-.h6 small,
-h4 .small,
-.h4 .small,
-h5 .small,
-.h5 .small,
-h6 .small,
-.h6 .small {
-  font-size: 75%;
 }
 h1,
 .h1 {
@@ -254,25 +175,6 @@ small, .small {
     left: 0;
     width: 100%;
     height: 100%;
-}
-iframe {
-    border: 1px 
-    black solid;
-}
-@media (min-width: 768px) {
-  .container {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  .container {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .container {
-    width: 1180px;
-  }
 }
 @media (min-width: 1200px) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
