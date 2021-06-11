@@ -54,7 +54,7 @@ hr {
 	color: #fff;
 }
 .alert {
-    padding: 12px;
+    padding: 10px;
     margin-bottom: 7px;
 }
 
@@ -82,8 +82,8 @@ h1,
 }
 h2,
 .h2 {
-  margin-top: 12px;
-  font-size: 34px;
+  margin-top: 3px;
+  font-size: 36px;
 }
 h3,
 .h3 {
