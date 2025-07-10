@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anwesenheitsliste Personen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        #counts {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #e0e7eb;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .count-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .count-item span {
+            margin-left: 8px;
+        }
+
+        .count-item.anwesend-text { color: #28a745; } /* Grün */
+        .count-item.abwesend-text { color: #dc3545; } /* Rot */
+
+
+        #photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive 2-Spalten-Layout */
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .photo-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 3px solid transparent; /* Standardrahmen */
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 200px; /* Feste Höhe für Bilder */
+            object-fit: cover; /* Bilder proportional zuschneiden */
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+
+        .photo-card h3 {
+            margin: 15px 0 10px 0;
+            color: #34495e;
+            font-size: 1.2em;
+        }
+
+        .photo-card p.status {
+            font-weight: bold;
+            padding-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        /* Status-spezifische Rahmen und Texte */
+        .photo-card[data-status="Anwesend"] {
+            border-color: #28a745; /* Grün */
+        }
+        .photo-card[data-status="Anwesend"] p.status {
+            color: #28a745;
+        }
+
+        .photo-card[data-status="Abwesend"] {
+            border-color: #dc3545; /* Rot */
+        }
+        .photo-card[data-status="Abwesend"] p.status {
+            color: #dc3545;
+        }
+
+        /* Modal / Panel Styling */
+        .modal-overlay {
+            display: none; /* Standardmäßig ausgeblendet */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px); /* Leichter Blur-Effekt */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+
+        .modal-content .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-content img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.8em;
+        }
+
+        .modal-content p.current-status {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .modal-content p.current-status.Anwesend { color: #28a745; }
+        .modal-content p.current-status.Abwesend { color: #dc3545; }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .modal-buttons button.btn-anwesend {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal-buttons button.btn-abwesend {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modal-buttons button.btn-anwesend:hover {
+            background-color: #218838;
+        }
+
+        .modal-buttons button.btn-abwesend:hover {
+            background-color: #c82333;
+        }
+
+        /* Aktiver Button im Modal (visuell hervorheben) */
+        .modal-buttons button.active {
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Blauer Schatten */
+            transform: scale(1.05);
+        }
+        .modal-buttons button.btn-anwesend.active {
+            box-shadow: 0 0 0 4px #28a74550;
+        }
+        .modal-buttons button.btn-abwesend.active {
+            box-shadow: 0 0 0 4px #dc354550;
+        }
+
+        @media (max-width: 768px) {
+            #photo-grid {
+                grid-template-columns: 1fr; /* Einzelspalte auf kleineren Bildschirmen */
+            }
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .modal-content img {
+                width: 150px;
+                height: 150px;
+            }
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kindergarten</h1>
+
+    <div id="counts">
+        <div class="count-item anwesend-text">Anwesend: <span id="anwesend-count">0</span></div>
+        <div class="count-item abwesend-text">Abwesend: <span id="abwesend-count">0</span></div>
+    </div>
+
+    <div id="photo-grid">
+        <!-- Foto-Karten werden hier von JavaScript eingefügt -->
+    </div>
+
+    <!-- Das Modal / Panel -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal-btn">X</span>
+            <img id="modal-person-photo" src="" alt="Personenfoto">
+            <h2 id="modal-person-name"></h2>
+            <p class="current-status" id="modal-person-current-status"></p>
+            <div class="modal-buttons">
+                <button class="btn-anwesend" id="btn-set-anwesend">Anwesend</button>
+                <button class="btn-abwesend" id="btn-set-abwesend">Abwesend</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array von Personen mit ihren Informationen
+        const people = [
+            { id: 'max-mustermann', name: 'Auto', photo: 'PHO00193.JPG', status: 'Anwesend' },
+            { id: 'erika-musterfrau', name: 'Eeyore', photo: 'PHO00184.JPG', status: 'Anwesend' },
+            { id: 'hans-meier', name: 'Zug', photo: 'PHO00186.JPG', status: 'Anwesend' },
+            { id: 'petra-schmidt', name: 'Bim', photo: 'PHO00183.JPG', status: 'Anwesend' },
+            { id: 'franz-mueller', name: 'Elefant', photo: 'PHO00182.JPG', status: 'Anwesend' },
+            { id: 'sabine-bauer', name: 'Ubahn', photo: 'PHO00194.JPG', status: 'Anwesend' },
+            { id: 'werner-kohl', name: 'Bus', photo: 'PHO00189.JPG', status: 'Anwesend' },
+            { id: 'claudia-holz', name: 'Yak', photo: 'PHO00190.JPG', status: 'Anwesend' },
+            { id: 'thomas-fischer', name: 'Badner Bahn', photo: 'PHO00188.JPG', status: 'Anwesend' },
+        ];
+
+        // Referenzen zu DOM-Elementen
+        const photoGrid = document.getElementById('photo-grid');
+        const anwesendCountSpan = document.getElementById('anwesend-count');
+        const abwesendCountSpan = document.getElementById('abwesend-count');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalPersonPhoto = document.getElementById('modal-person-photo');
+        const modalPersonName = document.getElementById('modal-person-name');
+        const modalPersonCurrentStatus = document.getElementById('modal-person-current-status');
+        const btnSetAnwesend = document.getElementById('btn-set-anwesend');
+        const btnSetAbwesend = document.getElementById('btn-set-abwesend');
+
+        let currentPersonIdInModal = null; // Speichert die ID der aktuell im Modal angezeigten Person
+
+        // Funktion zum Aktualisieren der Zähler
+        function updateCounts() {
+            let anwesendCount = 0;
+            let abwesendCount = 0;
+
+            people.forEach(person => {
+                if (person.status === 'Anwesend') {
+                    anwesendCount++;
+                } else {
+                    abwesendCount++;
+                }
+            });
+
+            anwesendCountSpan.textContent = anwesendCount;
+            abwesendCountSpan.textContent = abwesendCount;
+        }
+
+        // Funktion zum Erstellen einer Personenkarte
+        function createPersonCard(person) {
+            const card = document.createElement('div');
+            card.classList.add('photo-card');
+            card.dataset.personId = person.id; // Speichert die ID für den Zugriff
+            card.dataset.status = person.status; // Speichert den Status für CSS
+
+            card.innerHTML = `
+                <img src="${person.photo}" alt="${person.name}">
+                <h3>${person.name}</h3>
+                <p class="status">${person.status}</p>
+            `;
+
+            card.addEventListener('click', () => openModal(person.id));
+            return card;
+        }
+
+        // Funktion zum Öffnen des Modals
+        function openModal(personId) {
+            currentPersonIdInModal = personId;
+            const person = people.find(p => p.id === personId);
+
+            if (person) {
+                modalPersonPhoto.src = person.photo;
+                modalPersonPhoto.alt = person.name;
+                modalPersonName.textContent = person.name;
+                modalPersonCurrentStatus.textContent = `Aktueller Status: ${person.status}`;
+                modalPersonCurrentStatus.className = `current-status ${person.status}`; // Für Status-spezifische Farbe
+
+                // Aktiven Button im Modal hervorheben
+                btnSetAnwesend.classList.toggle('active', person.status === 'Anwesend');
+                btnSetAbwesend.classList.toggle('active', person.status === 'Abwesend');
+
+                modalOverlay.style.display = 'flex'; // Modal anzeigen
+            }
+        }
+
+        // Funktion zum Schließen des Modals
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            currentPersonIdInModal = null;
+        }
+
+        // Funktion zum Ändern des Anwesenheitsstatus
+        function toggleAttendance(newStatus) {
+            if (currentPersonIdInModal) {
+                const person = people.find(p => p.id === currentPersonIdInModal);
+                if (person) {
+                    person.status = newStatus;
+
+                    // Update the status on the main card
+                    const personCard = document.querySelector(`.photo-card[data-person-id="${person.id}"]`);
+                    if (personCard) {
+                        personCard.dataset.status = newStatus; // Update data-status attribute
+                        personCard.querySelector('.status').textContent = newStatus;
+                    }
+
+                    // Update modal display
+                    modalPersonCurrentStatus.textContent = `Aktueller Status: ${newStatus}`;
+                    modalPersonCurrentStatus.className = `current-status ${newStatus}`;
+
+                    // Update button active states in modal
+                    btnSetAnwesend.classList.toggle('active', newStatus === 'Anwesend');
+                    btnSetAbwesend.classList.toggle('active', newStatus === 'Abwesend');
+
+                    updateCounts(); // Zähler aktualisieren
+                }
+            }
+        }
+
+        // Event-Listener für Modal-Buttons
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (event) => {
+            // Schließe Modal, wenn außerhalb des Inhalts geklickt wird
+            if (event.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        btnSetAnwesend.addEventListener('click', () => toggleAttendance('Anwesend'));
+        btnSetAbwesend.addEventListener('click', () => toggleAttendance('Abwesend'));
+
+        // Initialisierung beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            people.forEach(person => {
+                const card = createPersonCard(person);
+                photoGrid.appendChild(card);
+            });
+            updateCounts(); // Initialzähler setzen
+        });
+    </script>
+
+</body>
+</html>
