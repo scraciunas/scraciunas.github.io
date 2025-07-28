@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Bank - Online-Banking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 90vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px; /* Default max-width for smaller screens (mobile) */
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .account-info {
+            background-color: #e8f0fe;
+            border: 1px solid #c7d9f7;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .account-info p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .account-info strong {
+            font-size: 1.5em;
+            color: #28a745;
+        }
+        .action-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .action-section h3 {
+            margin-top: 0;
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .action-section input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        /* Button Styles */
+        .action-section button {
+            width: 100%;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s ease;
+            margin-top: 5px; /* Added some space above buttons */
+        }
+
+        #add-funds-button {
+            background-color: #4CAF50; /* Green for Add Funds */
+        }
+        #add-funds-button:hover {
+            background-color: #45a049;
+        }
+        #add-funds-button:active {
+            background-color: #3e8e41;
+        }
+
+        #pay-bill-button {
+            background-color: #f44336; /* Red for Pay Bills */
+        }
+        #pay-bill-button:hover {
+            background-color: #da190b;
+        }
+        #pay-bill-button:active {
+            background-color: #c01309;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .transaction-history {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .transaction-history h3 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .transaction-history ul {
+            list-style: none;
+            padding: 0;
+        }
+        .transaction-history li {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .transaction-history li.deposit {
+            color: #28a745;
+        }
+        .transaction-history li.bill-pay {
+            color: #dc3545;
+        }
+        .transaction-history li span.date {
+            font-size: 0.85em;
+            color: #777;
+        }
+
+        /* --- Media Queries for Tablet and Wider Displays --- */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px; /* Increase max-width for tablets */
+                padding: 40px; /* More padding for larger screens */
+            }
+
+            /* Arrange action sections side-by-side */
+            .action-sections-wrapper {
+                display: flex;
+                gap: 20px; /* Space between the two sections */
+            }
+
+            .action-section {
+                flex: 1; /* Each section takes equal space */
+                margin-bottom: 0; /* Remove bottom margin if side-by-side */
+            }
+
+            .action-section input[type="number"] {
+                width: 100%; /* Adjust input width for flex container */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Willkommen bei der ACME Bank!</h1>
+        <h2>Hallo, Ilian!</h2>
+
+        <div class="account-info">
+            <p>Ihr aktueller Kontostand:</p>
+            <p><strong><span id="account-balance">0.00</span> €</strong></p>
+        </div>
+
+        <div class="action-sections-wrapper">
+            <div class="action-section">
+                <h3>Geld einzahlen</h3>
+                <input type="number" id="add-amount" placeholder="Betrag eingeben" min="0.01" step="0.01">
+                <button id="add-funds-button" onclick="addMoney()">Geld einzahlen</button>
+                <div id="add-message" class="message"></div>
+            </div>
+
+            <div class="action-section">
+                <h3>Rechnungen bezahlen</h3>
+                <input type="number" id="bill-amount" placeholder="Rechnungsbetrag eingeben" min="0.01" step="0.01">
+                <button id="pay-bill-button" onclick="payBill()">Rechnung bezahlen</button>
+                <div id="pay-message" class="message"></div>
+            </div>
+        </div>
+
+        <div class="transaction-history">
+            <h3>Transaktionsverlauf</h3>
+            <ul id="transactions-list">
+                <!-- Transaktionen werden hier per JavaScript hinzugefügt -->
+                <li style="text-align: center; color: #777;">Noch keine Transaktionen.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const ACCOUNT_BALANCE_KEY = 'acmeBankBalance';
+        const TRANSACTION_HISTORY_KEY = 'acmeBankTransactions';
+        let accountBalance = 0;
+        let transactionHistory = [];
+
+        const accountBalanceSpan = document.getElementById('account-balance');
+        const addAmountInput = document.getElementById('add-amount');
+        const billAmountInput = document.getElementById('bill-amount');
+        const addMessageDiv = document.getElementById('add-message');
+        const payMessageDiv = document.getElementById('pay-message');
+        const transactionsList = document.getElementById('transactions-list');
+
+        // --- Utility Functions ---
+
+        function formatCurrency(amount) {
+            // Formatiert auf 2 Dezimalstellen. Das Währungssymbol wird in HTML/JS-String hinzugefügt.
+            return parseFloat(amount).toFixed(2);
+        }
+
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000); // Nachricht nach 3 Sekunden ausblenden
+        }
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            // Using 'de-DE' for German locale specific formatting
+            return now.toLocaleString('de-DE');
+        }
+
+        // --- Core Banking Functions ---
+
+        function updateBalanceDisplay() {
+            accountBalanceSpan.textContent = formatCurrency(accountBalance);
+            localStorage.setItem(ACCOUNT_BALANCE_KEY, accountBalance);
+        }
+
+        function renderTransactionHistory() {
+            transactionsList.innerHTML = ''; // Vorhandene Liste leeren
+            if (transactionHistory.length === 0) {
+                transactionsList.innerHTML = '<li style="text-align: center; color: #777;">Noch keine Transaktionen.</li>';
+                return;
+            }
+
+            transactionHistory.forEach(transaction => {
+                const li = document.createElement('li');
+                li.classList.add(transaction.type === 'deposit' ? 'deposit' : 'bill-pay');
+                // Aktualisiert, um Euro-Symbol anzuzeigen
+                li.innerHTML = `
+                    <span>${transaction.type === 'deposit' ? 'Einzahlung' : 'Rechnungszahlung'}: ${formatCurrency(transaction.amount)} €</span>
+                    <span class="date">${transaction.date}</span>
+                `;
+                transactionsList.prepend(li); // Neue Transaktionen oben hinzufügen
+            });
+            localStorage.setItem(TRANSACTION_HISTORY_KEY, JSON.stringify(transactionHistory));
+        }
+
+        function loadAccountData() {
+            const savedBalance = localStorage.getItem(ACCOUNT_BALANCE_KEY);
+            if (savedBalance !== null) {
+                accountBalance = parseFloat(savedBalance);
+            }
+
+            const savedTransactions = localStorage.getItem(TRANSACTION_HISTORY_KEY);
+            if (savedTransactions) {
+                try {
+                    transactionHistory = JSON.parse(savedTransactions);
+                } catch (e) {
+                    console.error("Fehler beim Parsen des Transaktionsverlaufs aus dem lokalen Speicher:", e);
+                    transactionHistory = []; // Zurücksetzen, wenn beschädigt
+                }
+            }
+
+            updateBalanceDisplay();
+            renderTransactionHistory();
+        }
+
+        function addMoney() {
+            const amount = parseFloat(addAmountInput.value);
+
+            if (isNaN(amount) || amount <= 0) {
+                showMessage(addMessageDiv, 'Bitte geben Sie einen gültigen positiven Betrag ein.', 'error');
+                return;
+            }
+
+            accountBalance += amount;
+            transactionHistory.push({
+                type: 'deposit',
+                amount: amount,
+                date: getCurrentDateTime()
+            });
+            updateBalanceDisplay();
+            renderTransactionHistory();
+            // Aktualisiert, um Euro-Symbol anzuzeigen
+            showMessage(addMessageDiv, `Erfolgreich ${formatCurrency(amount)} € hinzugefügt.`, 'success');
+            addAmountInput.value = ''; // Eingabe leeren
+        }
+
+        function payBill() {
+            const amount = parseFloat(billAmountInput.value);
+
+            if (isNaN(amount) || amount <= 0) {
+                showMessage(payMessageDiv, 'Bitte geben Sie einen gültigen positiven Rechnungsbetrag ein.', 'error');
+                return;
+            }
+
+            if (amount > accountBalance) {
+                showMessage(payMessageDiv, 'Unzureichende Deckung, um diese Rechnung zu bezahlen.', 'error');
+                return;
+            }
+
+            accountBalance -= amount;
+            transactionHistory.push({
+                type: 'bill-pay',
+                amount: amount,
+                date: getCurrentDateTime()
+            });
+            updateBalanceDisplay();
+            renderTransactionHistory();
+            // Aktualisiert, um Euro-Symbol anzuzeigen
+            showMessage(payMessageDiv, `Rechnung von ${formatCurrency(amount)} € erfolgreich bezahlt.`, 'success');
+            billAmountInput.value = ''; // Eingabe leeren
+        }
+
+        // --- Initialize on Page Load ---
+        document.addEventListener('DOMContentLoaded', loadAccountData);
+    </script>
+</body>
+</html>
