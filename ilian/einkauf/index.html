@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinder-Einkaufsspaß!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fce4ec;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 90%;
+            max-width: 1280px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        h1 {
+            color: #e91e63;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 0; /* Remove default margin */
+            flex-grow: 1; /* Allow heading to take available space */
+        }
+
+        #total-container {
+            background-color: #880e4f;
+            color: #fff;
+            padding: 10px 20px; /* Smaller padding for top display */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Slightly smaller shadow */
+            font-size: 1.5em; /* Slightly smaller font for top display */
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        #total-display {
+            margin-left: 10px;
+        }
+
+        #shopping-cart {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding: 25px;
+            width: 90%;
+            max-width: 1280px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 20px; /* Space between header and items */
+        }
+
+        .item {
+            background-color: #ffe0f0;
+            border: 2px solid #ff80ab;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .item-index {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: #ad1457;
+            color: #fff;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 50%;
+            font-size: 0.75em;
+            z-index: 10;
+        }
+
+        .item .glyph {
+            font-size: 3.5em;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .item h3 {
+            color: #ad1457;
+            margin: 4px 0;
+            font-size: 1em;
+            min-height: 2.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .item p {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #c2185b;
+            margin-top: 5px;
+        }
+
+        /* Media Queries for better tablet/mobile fit */
+        @media (max-width: 1024px) { /* Tablet landscape and smaller laptops */
+            #shopping-cart {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 15px;
+                padding: 20px;
+            }
+            .item .glyph {
+                font-size: 3.2em;
+            }
+            .item h3 {
+                font-size: 0.95em;
+                min-height: 2em;
+            }
+            .item p {
+                font-size: 0.9em;
+            }
+            header {
+                flex-direction: column; /* Stack header elements */
+                align-items: flex-start; /* Align title left */
+                margin-bottom: 20px;
+            }
+            h1 {
+                margin-bottom: 15px; /* Space between title and total */
+            }
+        }
+
+        @media (max-width: 768px) { /* Tablet portrait and smaller */
+            #shopping-cart {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
+                padding: 15px;
+            }
+            .item {
+                padding: 10px;
+            }
+            .item .glyph {
+                font-size: 2.8em;
+            }
+            .item h3 {
+                font-size: 0.85em;
+                min-height: 1.8em;
+            }
+            .item p {
+                font-size: 0.8em;
+            }
+            .item-index {
+                font-size: 0.7em;
+                padding: 2px 6px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            #total-container {
+                font-size: 1.3em;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Mobile phones */
+            #shopping-cart {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 8px;
+                padding: 10px;
+            }
+            .item {
+                padding: 8px;
+            }
+            .item .glyph {
+                font-size: 2.5em;
+            }
+            .item h3 {
+                font-size: 0.8em;
+                min-height: 1.6em;
+            }
+            .item p {
+                font-size: 0.75em;
+            }
+            .item-index {
+                font-size: 0.65em;
+                padding: 1px 5px;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px; /* Consistent spacing */
+            }
+            #total-container {
+                font-size: 1.1em;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🛍️ Kinder-Einkaufsspaß! 🛍️</h1>
+        <div id="total-container">
+            Gesamtkosten: <span id="total-display">€0.00</span>
+        </div>
+    </header>
+
+    <div id="shopping-cart">
+        <!-- Artikel 1 -->
+        <div class="item" data-price="12.50">
+            <span class="item-index">1</span>
+            <span class="glyph">🧸</span>
+            <h3>Kuscheliger Teddybär</h3>
+            <p>Preis: €12.50</p>
+        </div>
+
+        <!-- Artikel 2 -->
+        <div class="item" data-price="8.99">
+            <span class="item-index">2</span>
+            <span class="glyph">🧱</span>
+            <h3>Bunte Bausteine</h3>
+            <p>Preis: €8.99</p>
+        </div>
+
+        <!-- Artikel 3 -->
+        <div class="item" data-price="5.00">
+            <span class="item-index">3</span>
+            <span class="glyph">🎨</span>
+            <h3>Magisches Zeichenset</h3>
+            <p>Preis: €5.00</p>
+        </div>
+
+        <!-- Artikel 4 -->
+        <div class="item" data-price="15.75">
+            <span class="item-index">4</span>
+            <span class="glyph">🚗</span>
+            <h3>Schnelles Spielzeugauto</h3>
+            <p>Preis: €15.75</p>
+        </div>
+
+        <!-- Artikel 5 -->
+        <div class="item" data-price="7.20">
+            <span class="item-index">5</span>
+            <span class="glyph">🧩</span>
+            <h3>Tierpuzzle (100 Teile)</h3>
+            <p>Preis: €7.20</p>
+        </div>
+
+        <!-- Artikel 6 -->
+        <div class="item" data-price="10.00">
+            <span class="item-index">6</span>
+            <span class="glyph">📖</span>
+            <h3>Spannendes Märchenbuch</h3>
+            <p>Preis: €10.00</p>
+        </div>
+
+        <!-- Artikel 7 -->
+        <div class="item" data-price="2.50">
+            <span class="item-index">7</span>
+            <span class="glyph">⚽</span>
+            <h3>Federnder Spielball</h3>
+            <p>Preis: €2.50</p>
+        </div>
+
+        <!-- Artikel 8 -->
+        <div class="item" data-price="22.00">
+            <span class="item-index">8</span>
+            <span class="glyph">🏡</span>
+            <h3>Verträumtes Puppenhaus</h3>
+            <p>Preis: €22.00</p>
+        </div>
+
+        <!-- Artikel 9 -->
+        <div class="item" data-price="18.90">
+            <span class="item-index">9</span>
+            <span class="glyph">🤖</span>
+            <h3>Freundlicher Roboter</h3>
+            <p>Preis: €18.90</p>
+        </div>
+
+        <!-- Artikel 10 -->
+        <div class="item" data-price="9.50">
+            <span class="item-index">10</span>
+            <span class="glyph">🚂</span>
+            <h3>Eisenbahn-Set</h3>
+            <p>Preis: €9.50</p>
+        </div>
+
+        <!-- Artikel 11 -->
+        <div class="item" data-price="11.00">
+            <span class="item-index">11</span>
+            <span class="glyph">🦖</span>
+            <h3>Großer Dino-Freund</h3>
+            <p>Preis: €11.00</p>
+        </div>
+
+        <!-- Artikel 12 -->
+        <div class="item" data-price="6.80">
+            <span class="item-index">12</span>
+            <span class="glyph">🛸</span>
+            <h3>Fliegende Untertasse</h3>
+            <p>Preis: €6.80</p>
+        </div>
+
+        <!-- Artikel 13 -->
+        <div class="item" data-price="14.25">
+            <span class="item-index">13</span>
+            <span class="glyph">🎶</span>
+            <h3>Musikinstrument-Set</h3>
+            <p>Preis: €14.25</p>
+        </div>
+
+        <!-- Artikel 14 -->
+        <div class="item" data-price="3.99">
+            <span class="item-index">14</span>
+            <span class="glyph">🖍️</span>
+            <h3>Buntstifte-Box</h3>
+            <p>Preis: €3.99</p>
+        </div>
+
+        <!-- Artikel 15 -->
+        <div class="item" data-price="25.50">
+            <span class="item-index">15</span>
+            <span class="glyph">🚲</span>
+            <h3>Kleines Laufrad</h3>
+            <p>Preis: €25.50</p>
+        </div>
+
+        <!-- Artikel 16 -->
+        <div class="item" data-price="1.50">
+            <span class="item-index">16</span>
+            <span class="glyph">🍬</span>
+            <h3>Leckere Süßigkeiten</h3>
+            <p>Preis: €1.50</p>
+        </div>
+
+        <!-- Artikel 17 -->
+        <div class="item" data-price="9.00">
+            <span class="item-index">17</span>
+            <span class="glyph">👩‍🍳</span>
+            <h3>Kinderküchen-Zubehör</h3>
+            <p>Preis: €9.00</p>
+        </div>
+
+        <!-- Artikel 18 -->
+        <div class="item" data-price="13.00">
+            <span class="item-index">18</span>
+            <span class="glyph">🔭</span>
+            <h3>Entdecker-Teleskop</h3>
+            <p>Preis: €13.00</p>
+        </div>
+
+        <!-- Artikel 19 -->
+        <div class="item" data-price="4.75">
+            <span class="item-index">19</span>
+            <span class="glyph">🎈</span>
+            <h3>Bunter Ballon</h3>
+            <p>Preis: €4.75</p>
+        </div>
+
+        <!-- Artikel 20 -->
+        <div class="item" data-price="16.00">
+            <span class="item-index">20</span>
+            <span class="glyph">👑</span>
+            <h3>Prinzessinnen-Kostüm</h3>
+            <p>Preis: €16.00</p>
+        </div>
+
+        <!-- Artikel 21 -->
+        <div class="item" data-price="17.00">
+            <span class="item-index">21</span>
+            <span class="glyph">🏰</span>
+            <h3>Mittelalterliche Burg</h3>
+            <p>Preis: €17.00</p>
+        </div>
+
+        <!-- Artikel 22 -->
+        <div class="item" data-price="4.00">
+            <span class="item-index">22</span>
+            <span class="glyph">🤸‍♀️</span>
+            <h3>Springseil</h3>
+            <p>Preis: €4.00</p>
+        </div>
+
+        <!-- Artikel 23 -->
+        <div class="item" data-price="6.50">
+            <span class="item-index">23</span>
+            <span class="glyph">🏺</span>
+            <h3>Modelliermasse-Set</h3>
+            <p>Preis: €6.50</p>
+        </div>
+
+        <!-- Artikel 24 -->
+        <div class="item" data-price="19.99">
+            <span class="item-index">24</span>
+            <span class="glyph">🎲</span>
+            <h3>Familien-Brettspiel</h3>
+            <p>Preis: €19.99</p>
+        </div>
+
+        <!-- Artikel 25 (New) -->
+        <div class="item" data-price="8.75">
+            <span class="item-index">25</span>
+            <span class="glyph">👨‍🚒</span>
+            <h3>Feuerwehr-Set</h3>
+            <p>Preis: €8.75</p>
+        </div>
+
+        <!-- Artikel 26 (New) -->
+        <div class="item" data-price="3.20">
+            <span class="item-index">26</span>
+            <span class="glyph">🎶</span>
+            <h3>Rassel-Ei</h3>
+            <p>Preis: €3.20</p>
+        </div>
+
+        <!-- Artikel 27 (New) -->
+        <div class="item" data-price="29.00">
+            <span class="item-index">27</span>
+            <span class="glyph">🛴</span>
+            <h3>Kinderroller</h3>
+            <p>Preis: €29.00</p>
+        </div>
+
+        <!-- Artikel 28 (New) -->
+        <div class="item" data-price="1.99">
+            <span class="item-index">28</span>
+            <span class="glyph">💧</span>
+            <h3>Seifenblasen-Set</h3>
+            <p>Preis: €1.99</p>
+        </div>
+
+    </div>
+
+    <script>
+        let totalCost = 0;
+        const totalDisplay = document.getElementById('total-display');
+        const items = document.querySelectorAll('.item');
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const price = parseFloat(item.dataset.price); // Get price from data-price attribute
+                totalCost += price;
+                totalDisplay.textContent = `€${totalCost.toFixed(2)}`; // Format to 2 decimal places
+            });
+        });
+    </script>
+
+</body>
+</html>
