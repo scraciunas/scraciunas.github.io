@@ -339,8 +339,31 @@
             billAmountInput.value = ''; // Eingabe leeren
         }
 
-        // --- Initialize on Page Load ---
-        document.addEventListener('DOMContentLoaded', loadAccountData);
+        // *** NEUER CODE HIER STARTET ***
+
+        // Funktion zum Abrufen von URL-Parametern
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Initialisierung bei Seitenladung
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAccountData(); // Laden der Kontodaten und Transaktionen
+
+            // Prüfen, ob ein 'amount'-Parameter in der URL vorhanden ist
+            const initialBillAmount = getUrlParameter('amount');
+            if (initialBillAmount) {
+                // Den Wert in das Rechnungsbetragsfeld eintragen
+                billAmountInput.value = parseFloat(initialBillAmount).toFixed(2);
+                // Optional: Sie könnten hier payBill() automatisch aufrufen,
+                // aber es ist sicherer, den Benutzer bestätigen zu lassen.
+            }
+        });
+
+        // *** NEUER CODE HIER ENDET ***
     </script>
 </body>
 </html>

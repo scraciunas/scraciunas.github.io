@@ -24,6 +24,7 @@
             align-items: center;
             margin-bottom: 30px;
             flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 15px; /* Space between title/total and buttons */
         }
 
         h1 {
@@ -33,7 +34,7 @@
             flex-grow: 1; /* Allow heading to take available space */
         }
 
-        #total-container {
+        #top-total-container { /* Renamed for clarity */
             background-color: #880e4f;
             color: #fff;
             padding: 10px 20px; /* Smaller padding for top display */
@@ -47,9 +48,49 @@
             white-space: nowrap; /* Prevent wrapping */
         }
 
-        #total-display {
+        #top-total-display {
             margin-left: 10px;
         }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px; /* Space between buttons and shopping cart */
+            flex-wrap: wrap; /* Allow buttons to wrap */
+            justify-content: center; /* Center buttons on smaller screens */
+            width: 90%; /* Match header width */
+            max-width: 1280px;
+        }
+
+        .action-buttons button {
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #pay-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        #pay-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        #reset-button {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+        #reset-button:hover {
+            background-color: #da190b;
+            transform: translateY(-2px);
+        }
+
 
         #shopping-cart {
             background-color: #fff;
@@ -61,7 +102,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 18px;
-            margin-top: 20px; /* Space between header and items */
         }
 
         .item {
@@ -141,10 +181,11 @@
             header {
                 flex-direction: column; /* Stack header elements */
                 align-items: flex-start; /* Align title left */
+                gap: 10px;
                 margin-bottom: 20px;
             }
-            h1 {
-                margin-bottom: 15px; /* Space between title and total */
+            .action-buttons {
+                justify-content: flex-start; /* Align buttons left with title */
             }
         }
 
@@ -174,9 +215,18 @@
             h1 {
                 font-size: 1.8em;
             }
-            #total-container {
+            #top-total-container {
                 font-size: 1.3em;
                 padding: 12px 25px;
+            }
+            .action-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center; /* Center stacked buttons */
+                gap: 10px;
+            }
+            .action-buttons button {
+                width: 100%; /* Full width for stacked buttons */
+                max-width: 250px; /* Limit width */
             }
         }
 
@@ -205,9 +255,8 @@
             }
             h1 {
                 font-size: 1.5em;
-                margin-bottom: 15px; /* Consistent spacing */
             }
-            #total-container {
+            #top-total-container {
                 font-size: 1.1em;
                 padding: 10px 20px;
             }
@@ -218,10 +267,15 @@
 
     <header>
         <h1>🛍️ Kinder-Einkaufsspaß! 🛍️</h1>
-        <div id="total-container">
-            Gesamtkosten: <span id="total-display">€0.00</span>
+        <div id="top-total-container">
+            Gesamtkosten: <span id="top-total-display">€0.00</span>
         </div>
     </header>
+
+    <div class="action-buttons">
+        <button id="pay-button" onclick="payNow()">Bezahlen</button>
+        <button id="reset-button" onclick="resetTotal()">Summe zurücksetzen</button>
+    </div>
 
     <div id="shopping-cart">
         <!-- Artikel 1 -->
@@ -416,7 +470,7 @@
             <p>Preis: €19.99</p>
         </div>
 
-        <!-- Artikel 25 (New) -->
+        <!-- Artikel 25 (Neu) -->
         <div class="item" data-price="8.75">
             <span class="item-index">25</span>
             <span class="glyph">👨‍🚒</span>
@@ -424,7 +478,7 @@
             <p>Preis: €8.75</p>
         </div>
 
-        <!-- Artikel 26 (New) -->
+        <!-- Artikel 26 (Neu) -->
         <div class="item" data-price="3.20">
             <span class="item-index">26</span>
             <span class="glyph">🎶</span>
@@ -432,7 +486,7 @@
             <p>Preis: €3.20</p>
         </div>
 
-        <!-- Artikel 27 (New) -->
+        <!-- Artikel 27 (Neu) -->
         <div class="item" data-price="29.00">
             <span class="item-index">27</span>
             <span class="glyph">🛴</span>
@@ -440,7 +494,7 @@
             <p>Preis: €29.00</p>
         </div>
 
-        <!-- Artikel 28 (New) -->
+        <!-- Artikel 28 (Neu) -->
         <div class="item" data-price="1.99">
             <span class="item-index">28</span>
             <span class="glyph">💧</span>
@@ -452,16 +506,34 @@
 
     <script>
         let totalCost = 0;
-        const totalDisplay = document.getElementById('total-display');
+        const topTotalDisplay = document.getElementById('top-total-display');
         const items = document.querySelectorAll('.item');
 
         items.forEach(item => {
             item.addEventListener('click', () => {
                 const price = parseFloat(item.dataset.price); // Get price from data-price attribute
                 totalCost += price;
-                totalDisplay.textContent = `€${totalCost.toFixed(2)}`; // Format to 2 decimal places
+                topTotalDisplay.textContent = `€${totalCost.toFixed(2)}`; // Format to 2 decimal places
             });
         });
+
+        function payNow() {
+            if (totalCost <= 0) {
+                alert("Bitte wählen Sie zuerst Artikel aus, um zu bezahlen!");
+                return;
+            }
+            // Ensure the amount is formatted to two decimal places for the URL
+            const amountToPay = totalCost.toFixed(2);
+            // Assuming your banking page is saved as 'acme_bank.html' in the same directory
+            const bankingPageUrl = `../bank/index.html?amount=${amountToPay}`;
+            window.open(bankingPageUrl, '_blank'); // Open in a new tab/window
+        }
+
+        function resetTotal() {
+            totalCost = 0;
+            topTotalDisplay.textContent = `€${totalCost.toFixed(2)}`;
+            alert("Die Einkaufssumme wurde zurückgesetzt.");
+        }
     </script>
 
 </body>
