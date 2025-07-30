@@ -526,7 +526,7 @@
             const amountToPay = totalCost.toFixed(2);
             // Assuming your banking page is saved as 'acme_bank.html' in the same directory
             const bankingPageUrl = `../bank/index.html?amount=${amountToPay}`;
-            window.open(bankingPageUrl, '_blank'); // Open in a new tab/window
+            window.open(bankingPageUrl, '_self'); // Open in a new tab/window
         }
 
         function resetTotal() {

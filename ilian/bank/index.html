@@ -66,7 +66,7 @@
             box-sizing: border-box;
         }
         /* Button Styles */
-        .action-section button {
+        .action-section button, #back-to-shop-button { /* Added back button ID */
             width: 100%;
             padding: 12px;
             color: white;
@@ -97,6 +97,18 @@
         #pay-bill-button:active {
             background-color: #c01309;
         }
+
+        #back-to-shop-button { /* Style for the new back button */
+            background-color: #555; /* Darker gray */
+            margin-bottom: 20px; /* Space below it */
+        }
+        #back-to-shop-button:hover {
+            background-color: #333;
+        }
+        #back-to-shop-button:active {
+            background-color: #000;
+        }
+
 
         .message {
             margin-top: 15px;
@@ -179,6 +191,8 @@
     <div class="container">
         <h1>Willkommen bei der ACME Bank!</h1>
         <h2>Hallo, Ilian!</h2>
+
+        <button id="back-to-shop-button" onclick="goBackToShop()">← Zurück zum Shop</button> <!-- NEW BACK BUTTON -->
 
         <div class="account-info">
             <p>Ihr aktueller Kontostand:</p>
@@ -339,8 +353,6 @@
             billAmountInput.value = ''; // Eingabe leeren
         }
 
-        // *** NEUER CODE HIER STARTET ***
-
         // Funktion zum Abrufen von URL-Parametern
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -348,6 +360,14 @@
             var results = regex.exec(location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
+
+        // Funktion zum Zurückkehren zur Einkaufsseite
+        function goBackToShop() {
+            window.history.back(); // Geht einfach zur vorherigen Seite im Browserverlauf zurück
+            // Alternativ, wenn Sie direkt zur shop.html gehen möchten:
+            // window.location.href = 'kinder_einkaufsspass.html'; // Ersetzen Sie mit dem tatsächlichen Namen Ihrer Einkaufsseite
+        }
+
 
         // Initialisierung bei Seitenladung
         document.addEventListener('DOMContentLoaded', () => {
@@ -358,12 +378,8 @@
             if (initialBillAmount) {
                 // Den Wert in das Rechnungsbetragsfeld eintragen
                 billAmountInput.value = parseFloat(initialBillAmount).toFixed(2);
-                // Optional: Sie könnten hier payBill() automatisch aufrufen,
-                // aber es ist sicherer, den Benutzer bestätigen zu lassen.
             }
         });
-
-        // *** NEUER CODE HIER ENDET ***
     </script>
 </body>
 </html>
