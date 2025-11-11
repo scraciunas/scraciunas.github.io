@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kinder‑Restaurant – Kellner:in spielen (Fotos)</title>
+  <title>Kinder-Restaurant – Kellner:in spielen (Fotos)</title>
   <style>
     :root{
       --pink:#ff4f9a; --pink-dark:#c71c6f; --violet:#7b1fa2; --mint:#e0fff4; --card:#fff7fb; --ink:#333;
@@ -41,7 +41,7 @@
 </head>
 <body>
   <header>
-    <h1>🍽️ Kinder‑Restaurant – Kellner:in spielen</h1>
+    <h1>🍽️ Kinder-Restaurant – Kellner:in spielen</h1>
     <div id="totals">Zwischensumme: <span id="subtotal">€0,00</span> Trinkgeld: <span id="tip">€0,00</span> Gesamt: <span id="grand">€0,00</span></div>
   </header>
 
@@ -75,14 +75,12 @@
 
   <script>
     // === KONFIGURATION ===
-    // Passe den Pfad an deine Bankseite an (wie in deinem Einkaufsspiel):
-    // Beispiel aus deinem Shop: '../bank/index.html'
+    // Pfad zur Bankseite (ggf. anpassen)
     const BANK_PAGE_URL = '../bank/index.html';
 
     const CURRENCY = new Intl.NumberFormat('de-AT', {style: 'currency', currency: 'EUR'});
 
-    // Bildquellen: wir nutzen frei verfügbare, dynamische Fotos von Unsplash Source.
-    // Falls ein Bild nicht lädt, zeigt die Karte automatisch ein Emoji als Fallback.
+    // Menüeinträge (mit Bildern)
     const ITEMS = [
       { name:'Burger',        price:7.50,  emoji:'🍔', img:'https://source.unsplash.com/featured/?burger' },
       { name:'Pizza',         price:8.00,  emoji:'🍕', img:'https://source.unsplash.com/featured/?pizza' },
@@ -203,7 +201,7 @@
         cartList.appendChild(li);
       });
 
-      // Store for session continuity
+      // Store für Sitzungs-Fortsetzung
       sessionStorage.setItem('restaurant-cart', JSON.stringify({items: state.items, tipRate: state.tipRate}));
     }
 
@@ -214,13 +212,31 @@
       update();
     }
 
-    // === PAY ===
+    // === PAY → Einzahlung in die Bank (localStorage) + Weiterleitung ===
     function pay(){
       const sub = +(calcSubtotal().toFixed(2));
       if(sub <= 0) { alert('Bitte zuerst etwas auswählen.'); return; }
       const total = +(sub + calcTip(sub)).toFixed(2);
-      const url = `${BANK_PAGE_URL}?amount=${total.toFixed(2)}`;
-      window.location.href = url;
+
+      // NEU: Direktes Einzahlen in das Bankkonto (gleiche Keys wie Bank-App)
+      const BAL_KEY = 'acmeBankBalance';
+      const TX_KEY  = 'acmeBankTransactions';
+
+      const savedBalance = parseFloat(localStorage.getItem(BAL_KEY)) || 0;
+      const newBalance   = +(savedBalance + total).toFixed(2);
+      localStorage.setItem(BAL_KEY, newBalance);
+
+      // Transaktionsverlauf aktualisieren
+      let tx = [];
+      try { tx = JSON.parse(localStorage.getItem(TX_KEY)) || []; } catch(e){ tx = []; }
+      tx.push({ type:'deposit', amount: total, date: new Date().toLocaleString('de-DE') });
+      localStorage.setItem(TX_KEY, JSON.stringify(tx));
+
+      // Optional: Warenkorb leeren (damit zurück im Restaurant alles neu ist)
+      clearAll();
+
+      // Weiter zur Bankseite (zeigt den neuen Kontostand)
+      window.location.href = BANK_PAGE_URL;
     }
 
     // === INIT ===

@@ -21,169 +21,54 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px; /* Default max-width for smaller screens (mobile) */
+            max-width: 500px;
         }
-        h1, h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        h1, h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
         .account-info {
-            background-color: #e8f0fe;
-            border: 1px solid #c7d9f7;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
+            background-color: #e8f0fe; border: 1px solid #c7d9f7;
+            padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;
         }
-        .account-info p {
-            margin: 5px 0;
-            font-size: 1.1em;
-        }
-        .account-info strong {
-            font-size: 1.5em;
-            color: #28a745;
-        }
+        .account-info strong { font-size: 1.5em; color: #28a745; }
         .action-section {
-            margin-bottom: 25px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fafafa;
+            margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #fafafa;
         }
-        .action-section h3 {
-            margin-top: 0;
-            color: #34495e;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        .action-section h3 { margin-top: 0; color: #34495e; text-align: center; margin-bottom: 15px; }
         .action-section input[type="number"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
         }
-        /* Button Styles */
-        .action-section button, #back-to-shop-button { /* Added back button ID */
-            width: 100%;
-            padding: 12px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.2s ease;
-            margin-top: 5px; /* Added some space above buttons */
+        .action-section button, #back-to-shop-button {
+            width: 100%; padding: 12px; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em;
+            transition: background-color 0.2s ease; margin-top: 5px;
         }
-
-        #add-funds-button {
-            background-color: #4CAF50; /* Green for Add Funds */
-        }
-        #add-funds-button:hover {
-            background-color: #45a049;
-        }
-        #add-funds-button:active {
-            background-color: #3e8e41;
-        }
-
-        #pay-bill-button {
-            background-color: #f44336; /* Red for Pay Bills */
-        }
-        #pay-bill-button:hover {
-            background-color: #da190b;
-        }
-        #pay-bill-button:active {
-            background-color: #c01309;
-        }
-
-        #back-to-shop-button { /* Style for the new back button */
-            background-color: #555; /* Darker gray */
-            margin-bottom: 20px; /* Space below it */
-        }
-        #back-to-shop-button:hover {
-            background-color: #333;
-        }
-        #back-to-shop-button:active {
-            background-color: #000;
-        }
-
+        #add-funds-button { background-color: #4CAF50; }
+        #add-funds-button:hover { background-color: #45a049; }
+        #pay-bill-button { background-color: #f44336; }
+        #pay-bill-button:hover { background-color: #da190b; }
+        #back-to-shop-button { background-color: #555; margin-bottom: 20px; }
+        #back-to-shop-button:hover { background-color: #333; }
 
         .message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            display: none; /* Hidden by default */
+            margin-top: 15px; padding: 10px; border-radius: 4px; text-align: center; font-weight: bold; display: none;
         }
-        .message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .transaction-history {
-            margin-top: 30px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-        .transaction-history h3 {
-            text-align: center;
-            color: #34495e;
-            margin-bottom: 15px;
-        }
-        .transaction-history ul {
-            list-style: none;
-            padding: 0;
-        }
+        .message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message.error   { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        .transaction-history { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .transaction-history h3 { text-align: center; color: #34495e; margin-bottom: 15px; }
+        .transaction-history ul { list-style: none; padding: 0; }
         .transaction-history li {
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #f9f9f9; border: 1px solid #eee; padding: 10px; margin-bottom: 8px; border-radius: 4px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .transaction-history li.deposit {
-            color: #28a745;
-        }
-        .transaction-history li.bill-pay {
-            color: #dc3545;
-        }
-        .transaction-history li span.date {
-            font-size: 0.85em;
-            color: #777;
-        }
+        .transaction-history li.deposit { color: #28a745; }
+        .transaction-history li.bill-pay { color: #dc3545; }
+        .transaction-history li span.date { font-size: 0.85em; color: #777; }
 
-        /* --- Media Queries for Tablet and Wider Displays --- */
         @media (min-width: 768px) {
-            .container {
-                max-width: 800px; /* Increase max-width for tablets */
-                padding: 40px; /* More padding for larger screens */
-            }
-
-            /* Arrange action sections side-by-side */
-            .action-sections-wrapper {
-                display: flex;
-                gap: 20px; /* Space between the two sections */
-            }
-
-            .action-section {
-                flex: 1; /* Each section takes equal space */
-                margin-bottom: 0; /* Remove bottom margin if side-by-side */
-            }
-
-            .action-section input[type="number"] {
-                width: 100%; /* Adjust input width for flex container */
-            }
+            .container { max-width: 800px; padding: 40px; }
+            .action-sections-wrapper { display: flex; gap: 20px; }
+            .action-section { flex: 1; margin-bottom: 0; }
+            .action-section input[type="number"] { width: 100%; }
         }
     </style>
 </head>
@@ -192,7 +77,7 @@
         <h1>Willkommen bei der ACME Bank!</h1>
         <h2>Hallo, Ilian!</h2>
 
-        <button id="back-to-shop-button" onclick="goBackToShop()">← Zurück zum Shop</button> <!-- NEW BACK BUTTON -->
+        <button id="back-to-shop-button" onclick="goBackToShop()">← Zurück</button>
 
         <div class="account-info">
             <p>Ihr aktueller Kontostand:</p>
@@ -218,7 +103,6 @@
         <div class="transaction-history">
             <h3>Transaktionsverlauf</h3>
             <ul id="transactions-list">
-                <!-- Transaktionen werden hier per JavaScript hinzugefügt -->
                 <li style="text-align: center; color: #777;">Noch keine Transaktionen.</li>
             </ul>
         </div>
@@ -237,148 +121,133 @@
         const payMessageDiv = document.getElementById('pay-message');
         const transactionsList = document.getElementById('transactions-list');
 
-        // --- Utility Functions ---
-
         function formatCurrency(amount) {
-            // Formatiert auf 2 Dezimalstellen. Das Währungssymbol wird in HTML/JS-String hinzugefügt.
             return parseFloat(amount).toFixed(2);
         }
-
         function showMessage(element, message, type) {
             element.textContent = message;
             element.className = `message ${type}`;
             element.style.display = 'block';
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 3000); // Nachricht nach 3 Sekunden ausblenden
+            setTimeout(() => { element.style.display = 'none'; }, 3000);
         }
-
         function getCurrentDateTime() {
-            const now = new Date();
-            // Using 'de-DE' for German locale specific formatting
-            return now.toLocaleString('de-DE');
+            return new Date().toLocaleString('de-DE');
         }
-
-        // --- Core Banking Functions ---
 
         function updateBalanceDisplay() {
             accountBalanceSpan.textContent = formatCurrency(accountBalance);
             localStorage.setItem(ACCOUNT_BALANCE_KEY, accountBalance);
         }
-
+        function goBackToRestaurant() {
+            window.location.href = "../restaurant/index.html";
+        }
+	  
         function renderTransactionHistory() {
-            transactionsList.innerHTML = ''; // Vorhandene Liste leeren
+            transactionsList.innerHTML = '';
             if (transactionHistory.length === 0) {
                 transactionsList.innerHTML = '<li style="text-align: center; color: #777;">Noch keine Transaktionen.</li>';
                 return;
             }
-
             transactionHistory.forEach(transaction => {
                 const li = document.createElement('li');
                 li.classList.add(transaction.type === 'deposit' ? 'deposit' : 'bill-pay');
-                // Aktualisiert, um Euro-Symbol anzuzeigen
                 li.innerHTML = `
                     <span>${transaction.type === 'deposit' ? 'Einzahlung' : 'Rechnungszahlung'}: ${formatCurrency(transaction.amount)} €</span>
                     <span class="date">${transaction.date}</span>
                 `;
-                transactionsList.prepend(li); // Neue Transaktionen oben hinzufügen
+                transactionsList.prepend(li);
             });
             localStorage.setItem(TRANSACTION_HISTORY_KEY, JSON.stringify(transactionHistory));
         }
-
         function loadAccountData() {
             const savedBalance = localStorage.getItem(ACCOUNT_BALANCE_KEY);
-            if (savedBalance !== null) {
-                accountBalance = parseFloat(savedBalance);
-            }
+            if (savedBalance !== null) accountBalance = parseFloat(savedBalance);
 
             const savedTransactions = localStorage.getItem(TRANSACTION_HISTORY_KEY);
             if (savedTransactions) {
-                try {
-                    transactionHistory = JSON.parse(savedTransactions);
-                } catch (e) {
-                    console.error("Fehler beim Parsen des Transaktionsverlaufs aus dem lokalen Speicher:", e);
-                    transactionHistory = []; // Zurücksetzen, wenn beschädigt
-                }
+                try { transactionHistory = JSON.parse(savedTransactions); }
+                catch(e) { transactionHistory = []; }
             }
-
             updateBalanceDisplay();
             renderTransactionHistory();
         }
 
         function addMoney() {
             const amount = parseFloat(addAmountInput.value);
-
             if (isNaN(amount) || amount <= 0) {
-                showMessage(addMessageDiv, 'Bitte geben Sie einen gültigen positiven Betrag ein.', 'error');
-                return;
+                showMessage(addMessageDiv, 'Bitte einen gültigen positiven Betrag eingeben.', 'error'); return;
             }
-
             accountBalance += amount;
-            transactionHistory.push({
-                type: 'deposit',
-                amount: amount,
-                date: getCurrentDateTime()
-            });
+            transactionHistory.push({ type: 'deposit', amount, date: getCurrentDateTime() });
             updateBalanceDisplay();
             renderTransactionHistory();
-            // Aktualisiert, um Euro-Symbol anzuzeigen
             showMessage(addMessageDiv, `Erfolgreich ${formatCurrency(amount)} € hinzugefügt.`, 'success');
-            addAmountInput.value = ''; // Eingabe leeren
+            addAmountInput.value = '';
         }
-
         function payBill() {
             const amount = parseFloat(billAmountInput.value);
-
             if (isNaN(amount) || amount <= 0) {
-                showMessage(payMessageDiv, 'Bitte geben Sie einen gültigen positiven Rechnungsbetrag ein.', 'error');
-                return;
+                showMessage(payMessageDiv, 'Bitte einen gültigen positiven Rechnungsbetrag eingeben.', 'error'); return;
             }
-
             if (amount > accountBalance) {
-                showMessage(payMessageDiv, 'Unzureichende Deckung, um diese Rechnung zu bezahlen.', 'error');
-                return;
+                showMessage(payMessageDiv, 'Unzureichende Deckung, um diese Rechnung zu bezahlen.', 'error'); return;
             }
-
             accountBalance -= amount;
-            transactionHistory.push({
-                type: 'bill-pay',
-                amount: amount,
-                date: getCurrentDateTime()
-            });
+            transactionHistory.push({ type: 'bill-pay', amount, date: getCurrentDateTime() });
             updateBalanceDisplay();
             renderTransactionHistory();
-            // Aktualisiert, um Euro-Symbol anzuzeigen
-            showMessage(payMessageDiv, `Rechnung von ${formatCurrency(amount)} € erfolgreich bezahlt.`, 'success');
-            billAmountInput.value = ''; // Eingabe leeren
+            showMessage(payMessageDiv, `Rechnung von ${formatCurrency(amount)} € bezahlt.`, 'success');
+            billAmountInput.value = '';
         }
 
-        // Funktion zum Abrufen von URL-Parametern
+        // URL-Parameter lesen
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        // Funktion zum Zurückkehren zur Einkaufsseite
         function goBackToShop() {
-            window.history.back(); // Geht einfach zur vorherigen Seite im Browserverlauf zurück
-            // Alternativ, wenn Sie direkt zur shop.html gehen möchten:
-            // window.location.href = 'kinder_einkaufsspass.html'; // Ersetzen Sie mit dem tatsächlichen Namen Ihrer Einkaufsseite
+            window.history.back();
         }
 
+        // === NEU: Automatische Einzahlung von ?deposit= oder ?amount= ===
+        function autoDepositFromURL() {
+            // Bevorzugt ?deposit=, unterstützt weiterhin ?amount=
+            const depParam = getUrlParameter('deposit');
+            const legacyAmount = getUrlParameter('amount');
+            const raw = depParam || legacyAmount;
+            const amount = parseFloat(raw);
 
-        // Initialisierung bei Seitenladung
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAccountData(); // Laden der Kontodaten und Transaktionen
+            if (!raw || isNaN(amount) || amount <= 0) return;
 
-            // Prüfen, ob ein 'amount'-Parameter in der URL vorhanden ist
-            const initialBillAmount = getUrlParameter('amount');
-            if (initialBillAmount) {
-                // Den Wert in das Rechnungsbetragsfeld eintragen
-                billAmountInput.value = parseFloat(initialBillAmount).toFixed(2);
+            // Einzahlung
+            accountBalance += amount;
+            transactionHistory.push({
+                type: 'deposit',
+                amount,
+                date: getCurrentDateTime()
+            });
+            updateBalanceDisplay();
+            renderTransactionHistory();
+
+            // Erfolgsmeldung (im Einzahlungs-Panel)
+            showMessage(addMessageDiv, `Automatische Einzahlung: ${formatCurrency(amount)} € vom Restaurant gutgeschrieben.`, 'success');
+
+            // Optional: den Betrag auch ins Eingabefeld spiegeln
+            addAmountInput.value = '';
+
+            // URL aufräumen (Parameter entfernen, ohne neu zu laden)
+            if (window.history && window.history.replaceState) {
+                const cleanURL = location.origin + location.pathname;
+                history.replaceState(null, '', cleanURL);
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAccountData();
+            autoDepositFromURL(); // <— NEU
         });
     </script>
 </body>
