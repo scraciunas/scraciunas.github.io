@@ -530,7 +530,7 @@
 </div>
 
 <script>
-let players = [
+const DEFAULT_PLAYERS = [
   { id: 1, name: "Jannik Sinner", punkte: 11330, geld: 12450000 },
   { id: 2, name: "Carlos Alcaraz", punkte: 9255, geld: 10800000 },
   { id: 3, name: "Novak Djokovic", punkte: 7310, geld: 9300000 },
@@ -543,8 +543,24 @@ let players = [
   { id: 10, name: "Taylor Fritz", punkte: 3290, geld: 3500000 },
 ];
 
+function loadData() {
+  try {
+    const saved = localStorage.getItem('tennisRanking');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return DEFAULT_PLAYERS;
+}
+
+function saveData() {
+  try {
+    localStorage.setItem('tennisRanking', JSON.stringify(players));
+    localStorage.setItem('tennisNextId', nextId);
+  } catch(e) {}
+}
+
+let players = loadData();
 let sortKey = 'punkte';
-let nextId = 11;
+let nextId = parseInt(localStorage.getItem('tennisNextId') || '0') || (Math.max(...players.map(p => p.id)) + 1);
 
 function fmt(n) {
   return new Intl.NumberFormat('de-DE').format(n);
@@ -645,11 +661,12 @@ function render() {
 
 function updateField(id, field, value) {
   const p = players.find(x => x.id === id);
-  if (p) { p[field] = value; render(); }
+  if (p) { p[field] = value; saveData(); render(); }
 }
 
 function deletePlayer(id) {
   players = players.filter(x => x.id !== id);
+  saveData();
   render();
 }
 
@@ -671,6 +688,7 @@ function addPlayer() {
   const geld = parseInt(document.getElementById('newGeld').value) || 0;
   if (!name) { document.getElementById('newName').focus(); return; }
   players.push({ id: nextId++, name, punkte, geld });
+  saveData();
   closeModal();
   render();
 }
