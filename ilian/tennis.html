@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tennis Weltrangliste</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a08;
+    --surface: #111110;
+    --border: #2a2a26;
+    --accent: #c8f04b;
+    --accent2: #f0c84b;
+    --text: #e8e8e0;
+    --muted: #666660;
+    --danger: #f05a4b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Hero Header */
+  .header {
+    position: relative;
+    padding: 60px 60px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: 'TENNIS';
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 220px;
+    color: rgba(200,240,75,0.04);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .title-block h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  .title-block .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .sort-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .sort-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .sort-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  .add-btn {
+    background: var(--accent);
+    border: none;
+    color: #000;
+    padding: 10px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 16px;
+  }
+
+  .add-btn:hover {
+    background: var(--accent2);
+    transform: translateY(-1px);
+  }
+
+  /* Table */
+  .table-wrapper {
+    padding: 0 60px 60px;
+  }
+
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+  }
+
+  .ranking-table thead tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ranking-table thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 20px 16px;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .ranking-table thead th:first-child { width: 70px; }
+  .ranking-table thead th:last-child { width: 120px; text-align: center; }
+
+  .ranking-table tbody tr {
+    border-bottom: 1px solid rgba(42,42,38,0.5);
+    transition: background 0.15s;
+    animation: rowIn 0.4s ease both;
+  }
+
+  .ranking-table tbody tr:hover {
+    background: rgba(200,240,75,0.03);
+  }
+
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .rank-cell {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--muted);
+    padding: 16px;
+    vertical-align: middle;
+    min-width: 70px;
+  }
+
+  .rank-cell.top1 { color: var(--accent); }
+  .rank-cell.top2 { color: var(--accent2); }
+  .rank-cell.top3 { color: #c0a070; }
+
+  td {
+    padding: 16px;
+    vertical-align: middle;
+  }
+
+  .player-name {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .points-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .money-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* Clickable cell values */
+  .cell-value {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 0;
+    border-radius: 2px;
+    transition: color 0.15s;
+    position: relative;
+  }
+
+  .cell-value::after {
+    content: '✎';
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    color: var(--muted);
+  }
+
+  .cell-value:hover::after { opacity: 1; }
+  .cell-value:hover { color: #fff; }
+
+  /* Edit popup */
+  .edit-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .edit-overlay.open { display: flex; }
+
+  .edit-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px 40px;
+    width: 380px;
+    max-width: 90vw;
+    animation: modalIn 0.25s ease;
+    position: relative;
+  }
+
+  .edit-modal h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .edit-modal .field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .edit-modal .field input:focus {
+    border-color: var(--accent);
+  }
+
+  /* Action buttons */
+  .actions-cell {
+    text-align: center;
+  }
+
+  .del-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.2s;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .del-btn:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(240,90,75,0.08);
+  }
+
+  /* Add player modal */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+    width: 480px;
+    max-width: 90vw;
+    animation: modalIn 0.3s ease;
+    position: relative;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+    color: var(--accent);
+  }
+
+  .field {
+    margin-bottom: 24px;
+  }
+
+  .field label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus {
+    border-color: var(--accent);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--accent2); }
+
+  .btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 14px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel:hover { border-color: var(--danger); color: var(--danger); }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+  }
+
+  .close-btn:hover { color: var(--text); }
+
+  /* Bar indicator */
+  .bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 4px;
+  }
+
+  .bar {
+    height: 3px;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  .bar.green { background: var(--accent); }
+  .bar.yellow { background: var(--accent2); }
+
+  @media (max-width: 700px) {
+    .header, .table-wrapper { padding: 30px 20px; }
+    .header-controls { width: 100%; }
+    .ranking-table thead th:nth-child(4),
+    .ranking-table tbody td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="title-block">
+      <p class="subtitle">ATP · Saison 2025</p>
+      <h1>Welt­rang­liste</h1>
+    </div>
+    <div class="header-controls">
+      <span class="sort-label">Sortieren:</span>
+      <button class="sort-btn active" id="sortPts" onclick="sortBy('punkte')">Punkte</button>
+      <button class="sort-btn" id="sortMoney" onclick="sortBy('geld')">Preisgeld</button>
+      <button class="add-btn" onclick="openModal()">+ Spieler hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Spieler</th>
+        <th>Punkte</th>
+        <th>Preisgeld (€)</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- Edit Field Modal -->
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-modal">
+    <button class="close-btn" onclick="closeEditModal()">×</button>
+    <h3 id="editTitle">Bearbeiten</h3>
+    <div class="field">
+      <label id="editLabel">Wert</label>
+      <input id="editInput" type="text" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="confirmEdit()">OK</button>
+      <button class="btn-cancel" onclick="closeEditModal()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Player Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <h2>Neuer Spieler</h2>
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="newName" placeholder="Vor- und Nachname">
+    </div>
+    <div class="field">
+      <label>Punkte</label>
+      <input type="number" id="newPunkte" placeholder="z.B. 8000">
+    </div>
+    <div class="field">
+      <label>Preisgeld in Euro</label>
+      <input type="number" id="newGeld" placeholder="z.B. 5000000">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="addPlayer()">Spieler hinzufügen</button>
+      <button class="btn-cancel" onclick="closeModal()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let players = [
+  { id: 1, name: "Jannik Sinner", punkte: 11330, geld: 12450000 },
+  { id: 2, name: "Carlos Alcaraz", punkte: 9255, geld: 10800000 },
+  { id: 3, name: "Novak Djokovic", punkte: 7310, geld: 9300000 },
+  { id: 4, name: "Alexander Zverev", punkte: 6885, geld: 8750000 },
+  { id: 5, name: "Daniil Medvedev", punkte: 5765, geld: 7200000 },
+  { id: 6, name: "Andrey Rublev", punkte: 4860, geld: 5900000 },
+  { id: 7, name: "Casper Ruud", punkte: 4210, geld: 4800000 },
+  { id: 8, name: "Hubert Hurkacz", punkte: 3985, geld: 4200000 },
+  { id: 9, name: "Stefanos Tsitsipas", punkte: 3640, geld: 3900000 },
+  { id: 10, name: "Taylor Fritz", punkte: 3290, geld: 3500000 },
+];
+
+let sortKey = 'punkte';
+let nextId = 11;
+
+function fmt(n) {
+  return new Intl.NumberFormat('de-DE').format(n);
+}
+
+function fmtEuro(n) {
+  return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+}
+
+function sortBy(key) {
+  sortKey = key;
+  document.getElementById('sortPts').classList.toggle('active', key === 'punkte');
+  document.getElementById('sortMoney').classList.toggle('active', key === 'geld');
+  render();
+}
+
+// Edit modal state
+let editState = null;
+
+function openEditModal(id, field, currentValue) {
+  const labels = { name: 'Name', punkte: 'Punkte', geld: 'Preisgeld (€)' };
+  const titles = { name: 'Name bearbeiten', punkte: 'Punkte bearbeiten', geld: 'Preisgeld bearbeiten' };
+  editState = { id, field };
+  document.getElementById('editTitle').textContent = titles[field];
+  document.getElementById('editLabel').textContent = labels[field];
+  const input = document.getElementById('editInput');
+  input.type = field === 'name' ? 'text' : 'number';
+  input.value = currentValue;
+  document.getElementById('editOverlay').classList.add('open');
+  setTimeout(() => { input.focus(); input.select(); }, 50);
+}
+
+function closeEditModal() {
+  document.getElementById('editOverlay').classList.remove('open');
+  editState = null;
+}
+
+function confirmEdit() {
+  if (!editState) return;
+  const raw = document.getElementById('editInput').value.trim();
+  if (!raw) return;
+  const value = editState.field === 'name' ? raw : +raw;
+  updateField(editState.id, editState.field, value);
+  closeEditModal();
+}
+
+document.getElementById('editOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+
+document.getElementById('editInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') confirmEdit();
+  if (e.key === 'Escape') closeEditModal();
+});
+
+function render() {
+  const sorted = [...players].sort((a, b) => b[sortKey] - a[sortKey]);
+  const maxPts = sorted[0]?.punkte || 1;
+  const maxGeld = sorted[0]?.geld || 1;
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  sorted.forEach((p, i) => {
+    const rank = i + 1;
+    const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+    const pctPts = (p.punkte / maxPts * 100).toFixed(1);
+    const pctGeld = (p.geld / maxGeld * 100).toFixed(1);
+
+    const tr = document.createElement('tr');
+    tr.style.animationDelay = (i * 0.04) + 's';
+    tr.innerHTML = `
+      <td class="rank-cell ${rankClass}">${rank}</td>
+      <td class="player-name">
+        <span class="cell-value" onclick="openEditModal(${p.id},'name','${p.name.replace(/'/g,"\\'")}')">
+          ${p.name}
+        </span>
+      </td>
+      <td class="points-cell">
+        <span class="cell-value" onclick="openEditModal(${p.id},'punkte',${p.punkte})">
+          ${fmt(p.punkte)}
+        </span>
+        <div class="bar-wrap"><div class="bar green" style="width:${pctPts}%"></div></div>
+      </td>
+      <td class="money-cell">
+        <span class="cell-value" onclick="openEditModal(${p.id},'geld',${p.geld})">
+          ${fmtEuro(p.geld)}
+        </span>
+        <div class="bar-wrap"><div class="bar yellow" style="width:${pctGeld}%"></div></div>
+      </td>
+      <td class="actions-cell">
+        <button class="del-btn" onclick="deletePlayer(${p.id})" title="Löschen">×</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateField(id, field, value) {
+  const p = players.find(x => x.id === id);
+  if (p) { p[field] = value; render(); }
+}
+
+function deletePlayer(id) {
+  players = players.filter(x => x.id !== id);
+  render();
+}
+
+function openModal() {
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('newName').focus();
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('newName').value = '';
+  document.getElementById('newPunkte').value = '';
+  document.getElementById('newGeld').value = '';
+}
+
+function addPlayer() {
+  const name = document.getElementById('newName').value.trim();
+  const punkte = parseInt(document.getElementById('newPunkte').value) || 0;
+  const geld = parseInt(document.getElementById('newGeld').value) || 0;
+  if (!name) { document.getElementById('newName').focus(); return; }
+  players.push({ id: nextId++, name, punkte, geld });
+  closeModal();
+  render();
+}
+
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+render();
+</script>
+</body>
+</html>
