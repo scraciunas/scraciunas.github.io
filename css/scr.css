@@ -1,8 +1,6 @@
 html {
-  font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
   font-size: 10px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
@@ -15,14 +13,12 @@ body {
   background-color: #ffffff;
 }
 hr.new2 {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   margin-top: 13px;
   border-top: 1px solid;
   color: #283747;
 }
 hr.new3 {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   border-top: 1px dashed;
   color: #283747;
@@ -99,7 +95,7 @@ h5,
 }
 h6,
 .h6 {
-  font-size: 13px;
+  font-size: 14px;
 }
 table {
     font-size: 13px;
@@ -184,3 +180,22 @@ small, .small {
     max-width: 1180px;
   }
 }
+.btn-toggle .icon-minus { display: none; }
+.btn-toggle.collapsed .icon-plus { display: inline; }
+.btn-toggle.collapsed .icon-minus { display: none; }
+.btn-toggle:not(.collapsed) .icon-plus { display: none; }
+.btn-toggle:not(.collapsed) .icon-minus { display: inline; }
+
+/* Award highlight */
+.text-award { color: #D53F3F; }
+.text-award a { color: inherit; }
+
+/* Icon color utilities */
+.icon-pdf      { color: #A00000; }
+.icon-bib      { color: #707070; }
+.icon-ext      { color: #808000; }
+.icon-slides   { color: #1E8449; }
+.icon-media    { color: #0066CC; }
+.icon-abstract { color: #935116; }
+.icon-section  { color: #484848; }
+.icon-collapse { color: #495F75; }
