@@ -15,13 +15,13 @@ body {
 hr.new2 {
   box-sizing: content-box;
   margin-top: 13px;
-  border-top: 1px solid;
-  color: #283747;
+  border-top: 1.5px dashed;
+  color: #4A0000;
 }
 hr.new3 {
   box-sizing: content-box;
-  border-top: 1px dashed;
-  color: #283747;
+  border-top: 1.5px dashed;
+  color: #4A0000;
 }
 a {
   color: #006699;
@@ -187,8 +187,14 @@ small, .small {
 .btn-toggle:not(.collapsed) .icon-minus { display: inline; }
 
 /* Award highlight */
-.text-award { color: #D53F3F; }
-.text-award a { color: inherit; }
+.text-award { display: inline-block; background: #FDECEA; color: #8B1A1A; border: 1px solid #C0392B; border-radius: 4px; padding: 1px 6px; font-size: 0.8em; white-space: nowrap; }
+.text-award a { color: inherit; text-decoration: none; }
+.text-award a:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .td-award { padding-right: 0 !important; }
+  .td-award .text-award { position: static !important; transform: none !important; display: inline-block; margin-top: 4px; }
+}
 
 /* Icon color utilities */
 .icon-pdf      { color: #A00000; }
