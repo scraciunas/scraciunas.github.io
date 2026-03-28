@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tennisclub-Manager</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #dbe2ea;
+      --text: #0f172a;
+      --muted: #64748b;
+      --indoor-soft: #dbeafe;
+      --outdoor-soft: #dcfce7;
+      --booked-red: #b91c1c;
+      --booked-red-hover: #991b1b;
+      --closed: #e5e7eb;
+      --closed-text: #9ca3af;
+      --shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button, input[type="date"] {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    button.primary {
+      background: var(--text);
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .big {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .badge.indoor { background: var(--indoor-soft); }
+    .badge.outdoor { background: var(--outdoor-soft); }
+
+    .schedule-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .schedule-header {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 1400px;
+    }
+
+    th, td {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th:first-child, td:first-child {
+      position: sticky;
+      left: 0;
+      background: #f8fafc;
+      z-index: 2;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      min-width: 70px;
+    }
+
+    .court-header {
+      padding: 8px 4px;
+      font-size: 12px;
+    }
+
+    .court-header.indoor { background: var(--indoor-soft); }
+    .court-header.outdoor { background: var(--outdoor-soft); }
+
+    .hour-cell {
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .slot {
+      width: 100%;
+      min-height: 55px;
+      border: none;
+      padding: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .slot.indoor.available { background: var(--indoor-soft); }
+    .slot.outdoor.available { background: var(--outdoor-soft); }
+
+    .slot.booked {
+      background: var(--booked-red);
+      color: white;
+    }
+
+    .slot.booked:hover {
+      background: var(--booked-red-hover);
+    }
+
+    .slot.closed {
+      background: var(--closed);
+      color: var(--closed-text);
+      cursor: not-allowed;
+    }
+
+    dialog {
+      border: none;
+      border-radius: 12px;
+      padding: 0;
+    }
+
+    .modal {
+      padding: 16px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- JS unchanged -->
+
+  <div class="app">
+    <div class="topbar">
+      <div>
+        <h1>Tennisclub-Manager</h1>
+      </div>
+
+      <div class="controls">
+        <button id="prevDay">Vorheriger Tag</button>
+        <input type="date" id="selectedDate" />
+        <button id="nextDay">Nächster Tag</button>
+        <button id="openSettings" class="primary">Einstellungen</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">Ausgewählter Tag</div>
+        <div id="selectedDayText" style="font-size: 24px; font-weight: bold;"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Buchungen</div>
+        <div id="bookedCount" class="big">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Verfügbar</div>
+        <div id="availableCount" class="big">0</div>
+      </div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-header">
+        <div class="legend">
+          <span class="badge indoor">Hallenplätze: Platz 1–7</span>
+          <span class="badge outdoor">Außenplätze: Platz 8–24</span>
+          <span class="badge" id="outdoorInfo"></span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="scheduleTable"></table>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="bookingDialog">
+    <div class="modal">
+      <h2 id="bookingDialogTitle">Platz buchen</h2>
+      <div class="info-box" id="bookingInfo"></div>
+      <div class="field" id="bookingNameField">
+        <label for="bookingName">Name</label>
+        <input type="text" id="bookingName" placeholder="Name eingeben" />
+      </div>
+      <div class="field" id="bookingDisplayField" style="display:none;">
+        <label>Gebucht auf den Namen</label>
+        <div class="info-box" id="bookingDisplayName" style="margin-bottom:0;"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="deleteBooking" style="display:none; background:#b91c1c; color:white; border-color:#b91c1c;">Buchung löschen</button>
+        <div style="display:flex; gap:10px;">
+          <button id="saveBooking" class="primary">Buchung speichern</button>
+          <button id="closeBooking">Schließen</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <div class="modal">
+      <h2>Einstellungen</h2>
+      <div class="field">
+        <label for="outdoorAvailableFrom">Außenplätze verfügbar ab</label>
+        <input type="date" id="outdoorAvailableFrom" />
+      </div>
+      <p class="muted">Vor diesem Datum werden die Außenplätze als geschlossen angezeigt.</p>
+      <div class="modal-actions">
+        <span></span>
+        <button id="closeSettings" class="primary">Fertig</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const STORAGE_KEY = 'tennisclub-manager-html-v1';
+
+    const indoorCourts = Array.from({ length: 7 }, (_, i) => ({
+      id: `indoor-${i + 1}`,
+      name: `Platz ${i + 1}`,
+      type: 'indoor'
+    }));
+
+    const outdoorCourts = Array.from({ length: 15 }, (_, i) => ({
+      id: `outdoor-${i + 8}`,
+      name: `Platz ${i + 8}`,
+      type: 'outdoor'
+    }));
+
+    const courts = [...indoorCourts, ...outdoorCourts];
+    const hours = Array.from({ length: 16 }, (_, i) => 7 + i);
+
+    const state = {
+      selectedDate: formatDate(new Date()),
+      outdoorAvailableFrom: formatDate(new Date()),
+      bookings: {},
+      activeSlot: null
+    };
+
+    const els = {
+      selectedDate: document.getElementById('selectedDate'),
+      selectedDayText: document.getElementById('selectedDayText'),
+      bookedCount: document.getElementById('bookedCount'),
+      availableCount: document.getElementById('availableCount'),
+      outdoorInfo: document.getElementById('outdoorInfo'),
+      scheduleTable: document.getElementById('scheduleTable'),
+      prevDay: document.getElementById('prevDay'),
+      nextDay: document.getElementById('nextDay'),
+      openSettings: document.getElementById('openSettings'),
+      settingsDialog: document.getElementById('settingsDialog'),
+      closeSettings: document.getElementById('closeSettings'),
+      outdoorAvailableFrom: document.getElementById('outdoorAvailableFrom'),
+      bookingDialog: document.getElementById('bookingDialog'),
+      bookingDialogTitle: document.getElementById('bookingDialogTitle'),
+      bookingInfo: document.getElementById('bookingInfo'),
+      bookingNameField: document.getElementById('bookingNameField'),
+      bookingDisplayField: document.getElementById('bookingDisplayField'),
+      bookingName: document.getElementById('bookingName'),
+      bookingDisplayName: document.getElementById('bookingDisplayName'),
+      saveBooking: document.getElementById('saveBooking'),
+      deleteBooking: document.getElementById('deleteBooking'),
+      closeBooking: document.getElementById('closeBooking')
+    };
+
+    function formatDate(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseDate(dateString) {
+      const [y, m, d] = dateString.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function addDays(dateString, days) {
+      const date = parseDate(dateString);
+      date.setDate(date.getDate() + days);
+      return formatDate(date);
+    }
+
+    function formatLongDate(dateString) {
+      return new Intl.DateTimeFormat('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).format(parseDate(dateString));
+    }
+
+    function hourText(hour) {
+      return String(hour).padStart(2, '0') + ':00';
+    }
+
+    function slotKey(date, courtId, hour) {
+      return `${date}__${courtId}__${hour}`;
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const saved = JSON.parse(raw);
+        if (saved.selectedDate) state.selectedDate = saved.selectedDate;
+        if (saved.outdoorAvailableFrom) state.outdoorAvailableFrom = saved.outdoorAvailableFrom;
+        if (saved.bookings && typeof saved.bookings === 'object') state.bookings = saved.bookings;
+      } catch (e) {
+        console.error('Gespeicherte Daten konnten nicht geladen werden.', e);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        selectedDate: state.selectedDate,
+        outdoorAvailableFrom: state.outdoorAvailableFrom,
+        bookings: state.bookings
+      }));
+    }
+
+    function isCourtAvailable(court, dateString) {
+      if (court.type === 'indoor') return true;
+      return dateString >= state.outdoorAvailableFrom;
+    }
+
+    function getBooking(date, courtId, hour) {
+      return state.bookings[slotKey(date, courtId, hour)] || '';
+    }
+
+    function setBooking(date, courtId, hour, name) {
+      state.bookings[slotKey(date, courtId, hour)] = name;
+      saveState();
+    }
+
+    function deleteBooking(date, courtId, hour) {
+      delete state.bookings[slotKey(date, courtId, hour)];
+      saveState();
+    }
+
+    function openBookingDialog(court, hour) {
+      if (!isCourtAvailable(court, state.selectedDate)) return;
+
+      const existing = getBooking(state.selectedDate, court.id, hour);
+      state.activeSlot = { court, hour };
+
+      els.bookingInfo.innerHTML = `
+        <div><strong>Datum:</strong> ${formatLongDate(state.selectedDate)}</div>
+        <div><strong>Platz:</strong> ${court.name}</div>
+        <div><strong>Uhrzeit:</strong> ${hourText(hour)}</div>
+      `;
+
+      if (existing) {
+        els.bookingDialogTitle.textContent = 'Buchung verwalten';
+        els.bookingNameField.style.display = 'none';
+        els.bookingDisplayField.style.display = 'block';
+        els.bookingDisplayName.textContent = existing;
+        els.saveBooking.style.display = 'none';
+        els.deleteBooking.style.display = 'inline-block';
+      } else {
+        els.bookingDialogTitle.textContent = 'Platz buchen';
+        els.bookingNameField.style.display = 'block';
+        els.bookingDisplayField.style.display = 'none';
+        els.bookingName.value = '';
+        els.saveBooking.style.display = 'inline-block';
+        els.deleteBooking.style.display = 'none';
+        setTimeout(() => els.bookingName.focus(), 0);
+      }
+
+      els.bookingDialog.showModal();
+    }
+
+    function closeBookingDialog() {
+      state.activeSlot = null;
+      els.bookingDialog.close();
+    }
+
+    function render() {
+      els.selectedDate.value = state.selectedDate;
+      els.selectedDayText.textContent = formatLongDate(state.selectedDate);
+      els.outdoorAvailableFrom.value = state.outdoorAvailableFrom;
+      els.outdoorInfo.textContent = `Außenplätze geöffnet ab ${formatLongDate(state.outdoorAvailableFrom)}`;
+
+      let bookedCount = 0;
+      let availableCount = 0;
+
+      const thead = [];
+      thead.push('<thead><tr>');
+      thead.push('<th><div class="hour-header">Uhrzeit</div></th>');
+      for (const court of courts) {
+        thead.push(`
+          <th>
+            <div class="court-header ${court.type}">
+              <div class="court-name">${court.name}</div>
+              <div class="court-type">${court.type === 'indoor' ? 'Halle' : 'Außen'}</div>
+            </div>
+          </th>
+        `);
+      }
+      thead.push('</tr></thead>');
+
+      const tbody = ['<tbody>'];
+      for (const hour of hours) {
+        tbody.push('<tr>');
+        tbody.push(`<td><div class="hour-cell">${hourText(hour)}</div></td>`);
+
+        for (const court of courts) {
+          const available = isCourtAvailable(court, state.selectedDate);
+          const booking = getBooking(state.selectedDate, court.id, hour);
+
+          if (available) availableCount += 1;
+          if (booking) bookedCount += 1;
+
+          let cls = `slot ${court.type}`;
+          let title = '';
+          let subtitle = '';
+          let disabledAttr = '';
+
+          if (!available) {
+            cls += ' closed';
+            title = 'Geschlossen';
+            subtitle = 'Außenplatz noch nicht geöffnet';
+            disabledAttr = 'disabled';
+          } else if (booking) {
+            cls += ' booked';
+            title = escapeHtml(booking);
+            subtitle = 'Klicken zum Löschen';
+          } else {
+            cls += ' available';
+            title = 'Frei';
+            subtitle = 'Klicken zum Buchen';
+          }
+
+          tbody.push(`
+            <td>
+              <button class="${cls}" data-court-id="${court.id}" data-hour="${hour}" ${disabledAttr}>
+                <div class="slot-title">${title}</div>
+                <div class="slot-subtitle">${subtitle}</div>
+              </button>
+            </td>
+          `);
+        }
+
+        tbody.push('</tr>');
+      }
+      tbody.push('</tbody>');
+
+      els.scheduleTable.innerHTML = thead.join('') + tbody.join('');
+      els.bookedCount.textContent = bookedCount;
+      els.availableCount.textContent = availableCount - bookedCount;
+
+      els.scheduleTable.querySelectorAll('.slot').forEach(button => {
+        if (button.disabled) return;
+        button.addEventListener('click', () => {
+          const courtId = button.dataset.courtId;
+          const hour = Number(button.dataset.hour);
+          const court = courts.find(c => c.id === courtId);
+          openBookingDialog(court, hour);
+        });
+      });
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    els.prevDay.addEventListener('click', () => {
+      state.selectedDate = addDays(state.selectedDate, -1);
+      saveState();
+      render();
+    });
+
+    els.nextDay.addEventListener('click', () => {
+      state.selectedDate = addDays(state.selectedDate, 1);
+      saveState();
+      render();
+    });
+
+    els.selectedDate.addEventListener('change', () => {
+      state.selectedDate = els.selectedDate.value;
+      saveState();
+      render();
+    });
+
+    els.openSettings.addEventListener('click', () => {
+      els.settingsDialog.showModal();
+    });
+
+    els.closeSettings.addEventListener('click', () => {
+      state.outdoorAvailableFrom = els.outdoorAvailableFrom.value;
+      saveState();
+      els.settingsDialog.close();
+      render();
+    });
+
+    els.closeBooking.addEventListener('click', closeBookingDialog);
+
+    els.saveBooking.addEventListener('click', () => {
+      if (!state.activeSlot) return;
+      const name = els.bookingName.value.trim();
+      if (!name) return;
+      setBooking(state.selectedDate, state.activeSlot.court.id, state.activeSlot.hour, name);
+      closeBookingDialog();
+      render();
+    });
+
+    els.bookingName.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        els.saveBooking.click();
+      }
+    });
+
+    els.deleteBooking.addEventListener('click', () => {
+      if (!state.activeSlot) return;
+      deleteBooking(state.selectedDate, state.activeSlot.court.id, state.activeSlot.hour);
+      closeBookingDialog();
+      render();
+    });
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>
