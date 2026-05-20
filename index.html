@@ -18,22 +18,46 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Unbounded:wght@200&display=swap" rel="stylesheet">
 		<script defer src="fonts/fontawesome-free-6.6.0-web/js/all.js"></script>
 		<link rel="stylesheet" href="./css/scr.css">
 		<link rel="stylesheet" href="./css/academicons.min.css">
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">
+		<!-- Sticky Navigation Bar -->
+		<nav class="navbar navbar-expand-md navbar-light bg-white sticky-top py-2" id="top-navbar">
+			<div class="container">
+				<a class="navbar-brand" href="#top"><span class="monogram-s">S</span><span class="monogram-c">C</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item"><a class="nav-link" href="#bio">Bio</a></li>
+						<li class="nav-item"><a class="nav-link" href="#research">Research</a></li>
+						<li class="nav-item"><a class="nav-link" href="#publications">Publications</a></li>
+						<li class="nav-item"><a class="nav-link" href="#books">Books</a></li>
+						<li class="nav-item"><a class="nav-link" href="#patents">Patents</a></li>
+						<li class="nav-item"><a class="nav-link" href="#reports">Reports</a></li>
+						<li class="nav-item"><a class="nav-link" href="#service">Service</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container mt-3" id="top">
+			<div class="row" id="bio">
 				<div class="col-md-2">
-					<img src="images/scraciunas2023.jpg" alt="Silviu S. Craciunas" style="height: 218px; margin-top: 13px;">
+					<img src="images/scraciunas2026.png" alt="Silviu S. Craciunas" style="height: 216px; margin-top: 13px;">
 				</div>
 				<div class="col-md-10">
 					<h2><span style="color:#808080;">Silviu S.</span> Craciunas</h2>
-					<i class="fas fa-exclamation-circle"></i>  Since 2025, I have been employed at <a href="https://www.nxp.com/" target="_blank">NXP Semiconductors</a> as a Senior Principal Scientist, working primarily in the automotive domain. I also hold a part-time <a href="https://www.dtu.dk/english/person/silviu-craciunas?id=228952&entity=profile" target="_blank">Associate Professor</a> position in the <a href="https://www.compute.dtu.dk" target="_blank">Department of Applied Mathematics and Computer Science</a> at the <a href="https://www.dtu.dk/english/" target="_blank">Technical University of Denmark</a>, where my research focuses on Time-Sensitive Networking (TSN), edge AI, and safety-critical systems.
+					
+					I am a Senior Principal Scientist at <a href="https://www.nxp.com/" target="_blank">NXP Semiconductors</a> and also hold a part-time <a href="https://www.dtu.dk/english/person/silviu-craciunas?id=228952&entity=profile" target="_blank">Associate Professor</a> position in the <a href="https://www.compute.dtu.dk" target="_blank">Department of Applied Mathematics and Computer Science</a> at the <a href="https://www.dtu.dk/english/" target="_blank">Technical University of Denmark (DTU)</a>.
 
-					Prior to these roles, I held research positions at <a href="https://tttech.com/" target="_blank">TTTech Computertechnik AG</a> and <a href="https://www.tttech-auto.com/" target="_blank">TTTech Auto AG</a> in Vienna, Austria. My work there focused on deterministic networking and real-time systems across industrial, aerospace, and automotive domains.
+					Before joining NXP, I held research and architecture roles at <a href="https://tttech.com/" target="_blank">TTTech Computertechnik AG</a> and <a href="https://www.tttech-auto.com/" target="_blank">TTTech Auto AG</a> in Vienna, Austria, where I worked on deterministic networking and real-time systems across industrial, aerospace, and automotive domains.
+
+					My research focuses on predictable and safety-critical distributed systems, including Time-Sensitive Networking (TSN), real-time scheduling, and edge AI for embedded platforms. I am particularly interested in methods that combine real-time systems, deterministic networking, and edge computing to enable the next generation of dependable cyber-physical and autonomous systems.
+					
 					<br/><br/>
 					<i class="far fa-envelope"></i>&nbsp;&nbsp;Please use 
 					<script>
@@ -56,7 +80,7 @@
 						//-->
 						//]]>
 					</script>
-					for any correspondence. <br/>
+					for any correspondence. 
 					<br/>
 					<b><i class="fas fa-globe-americas"></i>&nbsp;Web:&nbsp;</b>
 					<a href="https://dblp.org/pid/82/4882.html" target="_blank"><i class="ai ai-dblp"></i> dblp</a>
@@ -72,7 +96,7 @@
 			
 
 			
-			<div class="row">
+			<div class="row" id="research">
 				<div class="col-md-8">
 					<h5><strong><i class="fas fa-dna icon-section"></i> Research interests</strong></h5>
 					<ul>
@@ -95,11 +119,20 @@
 				</div>
 			</div>
 			<hr class="new3">
-			<h5>
-				<strong><i class="fas fa-flask icon-section"></i> Reviewed publications</strong> 
+			<h5 id="publications">
+				<strong><i class="fas fa-flask icon-section"></i> Reviewed publications</strong>
 			</h5>
 			<!-- Publications -->
 			<table class="table table-striped table-condensed">
+				<tr>
+					<td class="count">.</td>
+					<td>
+						A. Finzi and S.S. Craciunas - <b>Multi-core Integration of Sporadic Events in Time-triggered Systems</b><br/> 
+						In Proc. 38th Euromicro Conference on Real-Time Systems (ECRTS), Leibniz-Zentrum für Informatik, 2026. 
+						<a href="pdf/conferences/finzi_ecrts26.pdf"><i class="far fa-file-pdf icon-pdf" title="paper"></i> pdf</a>
+						|&nbsp;<a href="scraciunas_bib.html#FinziECRTS26" target="_blank"><i class="far fa-file-code icon-bib" title="bibtex"></i> bibtex</a>
+					</td>
+				</tr>
 				<tr>
 					<td class="count">.</td>
 					<td>
@@ -112,7 +145,7 @@
 				<tr>
 					<td class="count">.</td>
 					<td class="td-award" style="position: relative; padding-right: 140px;">
-						J. Ruh and S.S. Craciunas - <b>Towards Virtual Networking for a Time-Triggered Hypervisor</b>&nbsp;&nbsp;<span class="text-award" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);"><b><a href="pdf/awards/best_paper_award_rtns25.pdf"><i class="far fa-star"></i> best paper award</a></b></span><br/>
+						J. Ruh, S.S. Craciunas, and Jan Korecky - <b>Towards Virtual Networking for a Time-Triggered Hypervisor</b>&nbsp;&nbsp;<span class="text-award" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);"><b><a href="pdf/awards/best_paper_award_rtns25.pdf"><i class="far fa-star"></i> best paper award</a></b></span><br/>
 						In Proc. 33rd International Conference on Real-Time Networks and Systems (RTNS), LNCS, 2025.&nbsp;&nbsp;
 						<a href="pdf/conferences/ruh_rtns25.pdf"><i class="far fa-file-pdf icon-pdf" title="paper"></i> pdf</a>
 						|&nbsp;<a target="_blank" href="scraciunas_bib.html#RuhRTNS25"><i class="far fa-file-code icon-bib" title="bibtex"></i> bibtex</a>
@@ -537,7 +570,7 @@
 					</td>
 				</tr>
 			</table>
-			<h5>
+			<h5 id="books">
 				<strong><i class="fas fa-book"></i> Book chapters/sections</strong>
 			</h5>
 			<table class="table table-striped table-condensed">
@@ -550,7 +583,7 @@
 					</td>
 				</tr>
 			</table>
-			<h5>
+			<h5 id="patents">
 				<strong><i class="fas fa-lightbulb"></i> Patents</strong>
 			</h5>
 			<table class="table table-striped table-condensed">
@@ -619,10 +652,18 @@
 					</td>
 				</tr>
 			</table>
-			<h5>
+			<h5 id="reports">
 				<strong><i class="fas fa-archive"></i> Technical reports and other articles</strong> <small>(titles that coincide with publications are not listed)</small>
 			</h5>
 			<table class="table table-striped table-condensed">
+				<tr>
+					<td class="count">.</td>
+					<td>
+						R. Debnath, D. Bujosa, L. Zhao, S.S. Craciunas, P. Pop, S. Steinhorst - <b>TSNBench: Benchmarking LLM Proficiency in Time-Sensitive Networking</b>, <a target="_blank" href="https://arxiv.org/abs/2605.09481"><i class="ai ai-arxiv"></i> arXiv:2605.09481</a>, 2026.
+						<a href="pdf/techreports/debnath_CoRR26.pdf"><i class="far fa-file-pdf icon-pdf" title="paper"></i> pdf</a>
+						|&nbsp;<a target="_blank" href="scraciunas_bib.html#CORR26"><i class="far fa-file-code icon-bib" title="bibtex"></i> bibtex</a>
+					</td>
+				</tr>
 				<tr>
 					<td class="count">.</td>
 					<td>
@@ -742,7 +783,7 @@
 			<hr  class="new3">
 			
 			<!-- Level 1: Main Header (Community Service) -->
-			<h5 class="mb-1">
+			<h5 class="mb-1" id="service">
 				<strong><i class="fas fa-globe"></i>
 				Community Service</strong>
 			</h5>
@@ -757,12 +798,11 @@
 						<!-- Level 3: Content -->
 						<div style="margin-left: 7px; padding-left: 8px;">
 							<table class="table table-sm table-borderless mb-0">
-								<tbody> <!--
+								<tbody> 
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2">2026</td>
 										<td><b>Member of the Industry Outreach Sub-Committee</b>, Technical Community on Real-Time Systems (<a href="https://cmte.ieee.org/tcrts/">TCRTS</a>)</td>
 									</tr>
-									-->
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2">2026</td>
 										<td><b>Program Committee Co-Chair</b>, 34th International Conference on Real-Time Networks and Systems (<a target="_blank" href="https://2026.rtns-conference.org">RTNS 2026</a>)</td>
@@ -801,6 +841,10 @@
 								<tbody>
 									<tr>
 										<td>2026</td>
+										<td><b>Invited speaker</b>, 15th International Real-Time Systems Open Problems Seminar (<a target="_blank" href="https://www.ecrts.org/workshops/rtsops-2026/">RTSOPS 2026</a>)</td>
+									</tr>									
+									<tr>
+										<td>2026</td>
 										<td><b>Speaker</b>, Xplore talk series organized by <a href="https://ista.ac.at/en/home/">ISTA</a> and <a href="https://xista.com">XISTA</a></td>
 									</tr>
 									<tr>
@@ -834,28 +878,28 @@
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>RTAS</b></td>
 										<td>IEEE Real-Time and Embedded Technology and Applications Symposium: 
-											<a href="http://2026.rtas.org" target="_blank">2026</a>,
-											<a href="http://2024.rtas.org" target="_blank">2024</a>, 
+											<a href="http://2022.rtas.org" target="_blank">2022</a>, 
 											<a href="http://2023.rtas.org" target="_blank">2023</a>, 
-											<a href="http://2022.rtas.org" target="_blank">2022</a> 
+											<a href="http://2024.rtas.org" target="_blank">2024</a>, 
+											<a href="http://2026.rtas.org" target="_blank">2026</a>
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>ECRTS</b></td>
 										<td>Euromicro Conference on Real-Time Systems: 
-											<a href="https://www.ecrts.org/" target="_blank">2026</a>,
-											<a href="https://www.ecrts.org/" target="_blank">2025</a>, 
+											<a href="https://www.ecrts.org/" target="_blank">2023</a>,  
 											<a href="https://www.ecrts.org/" target="_blank">2024</a>, 
-											<a href="https://www.ecrts.org/" target="_blank">2023</a> 
+											<a href="https://www.ecrts.org/" target="_blank">2025</a>, 
+											<a href="https://www.ecrts.org/" target="_blank">2026</a>
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>RTAS-WiP/BP</b></td>
 										<td>IEEE Real-Time and Embedded Technology and Applications Symposium - Work in Progress/Brief Presentation Session: 
-											<a href="http://2023.rtas.org" target="_blank">2023</a>,
-											<a href="http://2022.rtas.org" target="_blank">2022</a>,
+											<a href="http://2017.rtas.org/" target="_blank">2017</a>,  
 											<a href="http://2018.rtas.org/" target="_blank">2018</a>, 
-											<a href="http://2017.rtas.org/" target="_blank">2017</a> 
+											<a href="http://2022.rtas.org" target="_blank">2022</a>,
+											<a href="http://2023.rtas.org" target="_blank">2023</a>
 										</td>
 									</tr>
 									<tr>
@@ -873,9 +917,9 @@
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>RTCSA</b></td>
 										<td>IEEE International Conference on Embedded and Real-Time Computing Systems and Application: 
-											<a href="https://rtcsa2026.github.io/" target="_blank">2026</a>,
-											<a href="https://rtcsa2025.github.io/" target="_blank">2025</a>,
-											<a href="https://rtcsa2024.github.io/index.html" target="_blank">2024</a>
+											<a href="https://rtcsa2024.github.io/index.html" target="_blank">2024</a>, 
+											<a href="https://rtcsa2025.github.io/" target="_blank">2025</a>, 
+											<a href="https://rtcsa2026.github.io/" target="_blank">2026</a>
 										</td>
 									</tr>
 									<tr>
@@ -887,17 +931,17 @@
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>NETWORKING</b></td>
 										<td>IFIP Networking Conference: 
-											<a href="https://networking.ifip.org/2026/" target="_blank">2026</a>,
+											<a href="https://networking.ifip.org/2024/" target="_blank">2024</a>, 
 											<a href="https://networking.ifip.org/2025/" target="_blank">2025</a>, 
-											<a href="https://networking.ifip.org/2024/" target="_blank">2024</a> 
+											<a href="https://networking.ifip.org/2026/" target="_blank">2026</a>
 										</td>
 									</tr>
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>WFCS</b></td>
 										<td>IEEE International Conference on Factory Communication Systems: 
-											<a href="https://www.hs-offenburg.de/wfcs2026/en/welcome" target="_blank">2026</a>,
+											<a href="https://wfcs23.unipv.it/" target="_blank">2023</a>, 
 											<a href="https://wfcs25.uni-rostock.de/" target="_blank">2025</a>, 
-											<a href="https://wfcs23.unipv.it/" target="_blank">2023</a>
+											<a href="https://www.hs-offenburg.de/wfcs2026/en/welcome" target="_blank">2026</a>
 										</td>
 									</tr>
 									<tr>
@@ -919,7 +963,10 @@
 									</tr>
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>Fog-IoT</b></td>
-										<td>Workshop on Fog Computing and the Internet of Things: <a target="_blank" href="https://sites.google.com/iotcenter.dk/fog-iot/call-for-papers?authuser=0">2020</a>, <a target="_blank" href="https://sites.google.com/iotcenter.dk/fog-iot/call-for-papers?authuser=0">2019</a></td>
+										<td>Workshop on Fog Computing and the Internet of Things: 
+											<a target="_blank" href="https://sites.google.com/iotcenter.dk/fog-iot/call-for-papers?authuser=0">2019</a>, 
+											<a target="_blank" href="https://sites.google.com/iotcenter.dk/fog-iot/call-for-papers?authuser=0">2020</a>
+										</td>
 									</tr>
 									<tr>
 										<td style="width: 1%; white-space: nowrap;" class="pe-2"><b>CPS-IoTBench</b></td>
@@ -946,6 +993,22 @@
 						<div style="margin-left: 7px; padding-left: 8px;">
 							<table class="table table-sm table-borderless mb-0">
 								<tbody>
+									<tr>
+										<td>2026</td>
+										<td><b>PhD Committee Member</b>, Srinidhi Srinivasan, <i>Systematic Timing Analysis of Real-Time Systems Across Computation and Communication</i>, Eindhoven University of Technology (TU/e)</td>
+									</tr>
+									<tr>
+										<td>2026</td>
+										<td><b>Jury member</b>, CPS-IoT Best PhD forum paper, <a href="https://cps-iot-week2026.inria.fr/" target="_blank">CPS-IoT Week</a></td>
+									</tr>
+									<tr>
+										<td>2026</td>
+										<td><b>Grant proposal reviewer</b>, German Research Foundation (DFG)</td>
+									</tr>
+									<tr>
+										<td>2025</td>
+										<td><b>Scientific Expert</b>, for the scientific panel CE25, <a href="https://anr.fr/en/call-for-proposals-details/call/generic-call-for-proposals-aapg-2025/">AAPG - Appel à projets générique 2025</a>, French National Research Agency (ANR)</td>
+									</tr>
 									<tr>
 										<td>2025</td>
 										<td><b>Best Paper Selection Committee member</b>, 31st IEEE International Conference on Embedded and Real-Time Computing Systems and Application (<a target="_blank" href="https://rtcsa2025.github.io/">RTCSA 2025</a>)</td>
@@ -1010,6 +1073,53 @@
 			document.querySelectorAll('a[target="_blank"]').forEach(function(a) {
 				if (!a.rel.includes('noopener')) a.rel = (a.rel ? a.rel + ' ' : '') + 'noopener noreferrer';
 			});
+		</script>
+		<script>
+			// Scroll-spy: highlight the nav link for the section currently in view
+			(function () {
+				var sectionIds = ['bio', 'research', 'publications', 'books', 'patents', 'reports', 'service'];
+				var navLinks = {};
+				var clickedId = null;
+				var clickTimer = null;
+
+				sectionIds.forEach(function (id) {
+					var link = document.querySelector('#navbarNav a[href="#' + id + '"]');
+					if (link) {
+						navLinks[id] = link;
+						link.addEventListener('click', function () {
+							// Immediately set active on click and suppress scroll-spy briefly
+							clickedId = id;
+							setActive(id);
+							clearTimeout(clickTimer);
+							clickTimer = setTimeout(function () { clickedId = null; }, 800);
+						});
+					}
+				});
+
+				function setActive(id) {
+					sectionIds.forEach(function (sid) {
+						if (navLinks[sid]) navLinks[sid].classList.remove('nav-active');
+					});
+					if (navLinks[id]) navLinks[id].classList.add('nav-active');
+				}
+
+				function updateActive() {
+					if (clickedId) return; // let click handler own the state briefly
+					var navbarHeight = document.getElementById('top-navbar').offsetHeight;
+					var scrollY = window.scrollY || window.pageYOffset;
+					var current = sectionIds[0];
+					sectionIds.forEach(function (id) {
+						var section = document.getElementById(id);
+						if (section && section.offsetTop - navbarHeight - 8 <= scrollY) {
+							current = id;
+						}
+					});
+					setActive(current);
+				}
+
+				window.addEventListener('scroll', updateActive, { passive: true });
+				updateActive();
+			})();
 		</script>
 	</body>
 </html>
