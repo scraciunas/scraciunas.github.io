@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tennis-Spielstand</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0c1210;
+      --panel: #151d1a;
+      --panel-2: #1b2622;
+      --text: #f5f7f6;
+      --muted: #aab8b2;
+      --line: #31423a;
+      --accent: #b9ef59;
+      --accent-ink: #10150e;
+      --danger: #ff7b7b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #17251f 0, var(--bg) 42%);
+      color: var(--text);
+      padding: 24px;
+    }
+
+    .app {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.03em;
+    }
+
+    .format-picker {
+      display: inline-flex;
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 14px;
+      cursor: pointer;
+      color: var(--text);
+      background: var(--panel-2);
+    }
+
+    button:hover { filter: brightness(1.08); }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(185,239,89,.45);
+      outline-offset: 2px;
+    }
+
+    .format-picker button[aria-pressed="true"] {
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 800;
+    }
+
+    .scoreboard {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(21, 29, 26, .94);
+    }
+
+    .score-head,
+    .player-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 100px 100px 130px 120px;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+    }
+
+    .score-head {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .player-row + .player-row { border-top: 1px solid var(--line); }
+
+    .identity {
+      min-width: 0;
+      display: grid;
+      gap: 5px;
+    }
+
+    .name-input,
+    .country-input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 7px 10px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .name-input {
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .country-input {
+      color: var(--muted);
+      font-size: .86rem;
+      appearance: auto;
+      cursor: pointer;
+    }
+
+    .country-input option {
+      color: CanvasText;
+      background: Canvas;
+    }
+
+    .name-input:hover, .name-input:focus,
+    .country-input:hover, .country-input:focus {
+      border-color: var(--line);
+      background: var(--panel-2);
+    }
+
+    .big-score {
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(2rem, 7vw, 4.1rem);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .point-score { color: var(--accent); }
+
+    .point-button {
+      width: 100%;
+      min-height: 56px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 900;
+    }
+
+    .point-button:disabled { opacity: .45; cursor: not-allowed; }
+
+    .status-area {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+    }
+
+    .status {
+      font-weight: 800;
+      min-width: 0;
+    }
+
+    .substatus {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 4px;
+    }
+
+    .reset {
+      background: transparent;
+      border: 1px solid #6f3e3e;
+      color: var(--danger);
+      font-weight: 800;
+    }
+
+    .history {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: rgba(21, 29, 26, .8);
+    }
+
+    .history-title {
+      margin: 0 0 10px;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .set-summary {
+      overflow-x: auto;
+    }
+
+    .set-table {
+      width: 100%;
+      min-width: 460px;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .set-table th,
+    .set-table td {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .set-table thead th {
+      border-top: 0;
+      color: var(--muted);
+      font-size: .75rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .set-table th:first-child,
+    .set-table td:first-child {
+      text-align: left;
+      min-width: 150px;
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .set-score {
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+
+    .set-current {
+      background: rgba(185,239,89,.08);
+      color: var(--accent);
+    }
+
+    .message {
+      min-height: 1.4em;
+      margin-top: 10px;
+      color: #ffd27a;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 14px; }
+      .score-head { display: none; }
+      .player-row {
+        grid-template-columns: 1fr 82px 82px;
+        grid-template-areas:
+          "name name button"
+          "sets games point";
+        gap: 10px;
+      }
+      .player-row .name { grid-area: name; }
+      .player-row .sets { grid-area: sets; }
+      .player-row .games { grid-area: games; }
+      .player-row .points { grid-area: point; }
+      .player-row .action { grid-area: button; align-self: stretch; }
+      .big-score { font-size: 2.5rem; }
+      .sets::before, .games::before, .points::before {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+      .sets::before { content: "Sätze"; }
+      .games::before { content: "Spiele"; }
+      .points::before { content: "Punkte"; }
+      .status-area { grid-template-columns: 1fr; }
+      .reset { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-labelledby="page-title">
+    <div class="topbar">
+      <h1 id="page-title">Tennis-Spielstand</h1>
+      <div class="format-picker" aria-label="Matchformat">
+        <button type="button" id="best3" aria-pressed="true">3 Sätze</button>
+        <button type="button" id="best5" aria-pressed="false">5 Sätze</button>
+      </div>
+    </div>
+
+    <section class="scoreboard" aria-label="Spielstand">
+      <div class="score-head" aria-hidden="true">
+        <div>Spieler</div><div style="text-align:center">Sätze</div><div style="text-align:center">Spiele</div><div style="text-align:center">Punkte</div><div></div>
+      </div>
+
+      <div class="player-row">
+        <div class="name identity">
+          <input id="name0" class="name-input" value="Spieler 1" maxlength="30" aria-label="Name von Spieler 1">
+          <select id="country0" class="country-input" aria-label="Land von Spieler 1"></select>
+        </div>
+        <div id="sets0" class="big-score sets">0</div>
+        <div id="games0" class="big-score games">0</div>
+        <div class="points"><div id="points0" class="big-score point-score">0</div></div>
+        <div class="action"><button id="point0" class="point-button" type="button">+ Punkt</button></div>
+      </div>
+
+      <div class="player-row">
+        <div class="name identity">
+          <input id="name1" class="name-input" value="Spieler 2" maxlength="30" aria-label="Name von Spieler 2">
+          <select id="country1" class="country-input" aria-label="Land von Spieler 2"></select>
+        </div>
+        <div id="sets1" class="big-score sets">0</div>
+        <div id="games1" class="big-score games">0</div>
+        <div class="points"><div id="points1" class="big-score point-score">0</div></div>
+        <div class="action"><button id="point1" class="point-button" type="button">+ Punkt</button></div>
+      </div>
+
+      <div class="status-area">
+        <div aria-live="polite">
+          <div id="status" class="status">Match bereit</div>
+          <div id="substatus" class="substatus">3-Satz-Match · 2 Gewinnsätze</div>
+        </div>
+        <button id="reset" class="reset" type="button">Match auf 0:0 zurücksetzen</button>
+      </div>
+    </section>
+
+    <section class="history" aria-label="Satzübersicht">
+      <h2 class="history-title">Satzübersicht</h2>
+      <div id="setHistory" class="set-summary"></div>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'tennis-scoreboard-v2';
+
+      const state = {
+        bestOf: 3,
+        sets: [0, 0],
+        games: [0, 0],
+        points: [0, 0],
+        tieBreak: false,
+        tiePoints: [0, 0],
+        completedSets: [],
+        matchOver: false,
+        winner: null
+      };
+
+      const el = {
+        best3: document.getElementById('best3'),
+        best5: document.getElementById('best5'),
+        names: [document.getElementById('name0'), document.getElementById('name1')],
+        countries: [document.getElementById('country0'), document.getElementById('country1')],
+        sets: [document.getElementById('sets0'), document.getElementById('sets1')],
+        games: [document.getElementById('games0'), document.getElementById('games1')],
+        points: [document.getElementById('points0'), document.getElementById('points1')],
+        pointButtons: [document.getElementById('point0'), document.getElementById('point1')],
+        status: document.getElementById('status'),
+        substatus: document.getElementById('substatus'),
+        reset: document.getElementById('reset'),
+        setHistory: document.getElementById('setHistory'),
+        message: document.getElementById('message')
+      };
+
+      const REGION_CODES = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(' ');
+      const regionNames = typeof Intl !== 'undefined' && Intl.DisplayNames
+        ? new Intl.DisplayNames(['de'], { type: 'region' })
+        : null;
+
+      const targetSets = () => Math.floor(state.bestOf / 2) + 1;
+      const playerName = (i) => el.names[i].value.trim() || `Spieler ${i + 1}`;
+
+      function flagEmoji(code) {
+        return code
+          .toUpperCase()
+          .replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt(0)));
+      }
+
+      function countryName(code) {
+        try { return regionNames?.of(code) || code; } catch (_) { return code; }
+      }
+
+      function populateCountrySelects() {
+        const countries = REGION_CODES
+          .map(code => ({ code, name: countryName(code) }))
+          .sort((a, b) => a.name.localeCompare(b.name, 'de'));
+
+        el.countries.forEach((select, playerIndex) => {
+          const empty = document.createElement('option');
+          empty.value = '';
+          empty.textContent = '🌐 Land auswählen';
+          select.appendChild(empty);
+
+          countries.forEach(({ code, name }) => {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${flagEmoji(code)} ${name}`;
+            select.appendChild(option);
+          });
+
+          select.setAttribute('aria-label', `Land von Spieler ${playerIndex + 1}`);
+        });
+      }
+
+      function resolveSavedCountry(value) {
+        if (typeof value !== 'string' || !value.trim()) return '';
+        const raw = value.trim();
+        const upper = raw.toUpperCase();
+        if (REGION_CODES.includes(upper)) return upper;
+
+        const normalized = raw.toLocaleLowerCase('de');
+        const aliases = {
+          'usa': 'US', 'united states of america': 'US',
+          'uk': 'GB', 'great britain': 'GB', 'england': 'GB',
+          'south korea': 'KR', 'republic of korea': 'KR',
+          'north korea': 'KP',
+          'russia': 'RU',
+          'iran': 'IR',
+          'vietnam': 'VN',
+          'venezuela': 'VE',
+          'bolivia': 'BO',
+          'moldova': 'MD',
+          'syria': 'SY',
+          'tanzania': 'TZ',
+          'laos': 'LA',
+          'brunei': 'BN',
+          'czech republic': 'CZ'
+        };
+        if (aliases[normalized]) return aliases[normalized];
+
+        const match = REGION_CODES.find(code => countryName(code).toLocaleLowerCase('de') === normalized);
+        return match || '';
+      }
+
+      function validPair(value) {
+        return Array.isArray(value) && value.length === 2 && value.every(Number.isFinite);
+      }
+
+      function persist() {
+        try {
+          const payload = {
+            ...state,
+            players: [
+              { name: el.names[0].value, country: el.countries[0].value },
+              { name: el.names[1].value, country: el.countries[1].value }
+            ]
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        } catch (error) {
+          el.message.textContent = 'Der Browser-Speicher ist nicht verfügbar. Der Spielstand kann daher nicht zwischen Sitzungen gespeichert werden.';
+        }
+      }
+
+      function restore() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const saved = JSON.parse(raw);
+
+          if (saved.bestOf === 3 || saved.bestOf === 5) state.bestOf = saved.bestOf;
+          if (validPair(saved.sets)) state.sets = saved.sets.map(v => Math.max(0, Math.floor(v)));
+          if (validPair(saved.games)) state.games = saved.games.map(v => Math.max(0, Math.floor(v)));
+          if (validPair(saved.points)) state.points = saved.points.map(v => Math.max(0, Math.floor(v)));
+          if (validPair(saved.tiePoints)) state.tiePoints = saved.tiePoints.map(v => Math.max(0, Math.floor(v)));
+          state.tieBreak = Boolean(saved.tieBreak);
+          state.matchOver = Boolean(saved.matchOver);
+          state.winner = saved.winner === 0 || saved.winner === 1 ? saved.winner : null;
+
+          if (Array.isArray(saved.completedSets)) {
+            state.completedSets = saved.completedSets
+              .filter(validPair)
+              .slice(0, 5)
+              .map(pair => pair.map(v => Math.max(0, Math.floor(v))));
+          }
+
+          if (Array.isArray(saved.players)) {
+            for (let i = 0; i < 2; i++) {
+              const player = saved.players[i];
+              if (!player || typeof player !== 'object') continue;
+              if (typeof player.name === 'string') {
+                const savedName = player.name.trim();
+                el.names[i].value = savedName === `Player ${i + 1}` ? `Spieler ${i + 1}` : player.name.slice(0, 30);
+              }
+              if (typeof player.country === 'string') el.countries[i].value = resolveSavedCountry(player.country);
+            }
+          }
+        } catch (error) {
+          try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+          el.message.textContent = 'Der gespeicherte Spielstand konnte nicht wiederhergestellt werden und wurde gelöscht.';
+        }
+      }
+
+      function regularPointLabel(player) {
+        const a = state.points[player];
+        const b = state.points[1 - player];
+        const basic = ['0', '15', '30', '40'];
+
+        if (a >= 3 && b >= 3) {
+          if (a === b) return '40';
+          if (a === b + 1) return 'AD';
+          return '40';
+        }
+        return basic[Math.min(a, 3)];
+      }
+
+      function render() {
+        for (let i = 0; i < 2; i++) {
+          el.sets[i].textContent = state.sets[i];
+          el.games[i].textContent = state.games[i];
+          el.points[i].textContent = state.tieBreak ? state.tiePoints[i] : regularPointLabel(i);
+          el.pointButtons[i].disabled = state.matchOver;
+          el.pointButtons[i].textContent = state.matchOver ? 'Match beendet' : '+ Punkt';
+        }
+
+        el.best3.setAttribute('aria-pressed', String(state.bestOf === 3));
+        el.best5.setAttribute('aria-pressed', String(state.bestOf === 5));
+
+        if (state.matchOver && state.winner !== null) {
+          el.status.textContent = `${playerName(state.winner)} gewinnt das Match`;
+        } else if (state.tieBreak) {
+          el.status.textContent = `Tie-Break · ${state.tiePoints[0]}–${state.tiePoints[1]}`;
+        } else if (state.points[0] >= 3 && state.points[1] >= 3 && state.points[0] === state.points[1]) {
+          el.status.textContent = 'Einstand';
+        } else if (state.points[0] >= 3 && state.points[1] >= 3 && Math.abs(state.points[0] - state.points[1]) === 1) {
+          const leader = state.points[0] > state.points[1] ? 0 : 1;
+          el.status.textContent = `Vorteil ${playerName(leader)}`;
+        } else {
+          el.status.textContent = `Spielstand im Satz: ${state.games[0]}–${state.games[1]}`;
+        }
+
+        el.substatus.textContent = `${state.bestOf}-Satz-Match · ${targetSets()} Gewinnsätze`;
+
+        renderSetSummary();
+
+        persist();
+      }
+
+      function renderSetSummary() {
+        const currentSetIndex = state.completedSets.length;
+        const setCount = state.bestOf;
+        const table = document.createElement('table');
+        table.className = 'set-table';
+
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const playerHeader = document.createElement('th');
+        playerHeader.scope = 'col';
+        playerHeader.textContent = 'Spieler';
+        headerRow.appendChild(playerHeader);
+        for (let setIndex = 0; setIndex < setCount; setIndex++) {
+          const th = document.createElement('th');
+          th.scope = 'col';
+          th.textContent = `Satz ${setIndex + 1}`;
+          if (!state.matchOver && setIndex === currentSetIndex) th.className = 'set-current';
+          headerRow.appendChild(th);
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        for (let player = 0; player < 2; player++) {
+          const row = document.createElement('tr');
+          const nameCell = document.createElement('th');
+          nameCell.scope = 'row';
+          const code = el.countries[player].value;
+          nameCell.textContent = `${code ? flagEmoji(code) + ' ' : ''}${playerName(player)}`;
+          row.appendChild(nameCell);
+
+          for (let setIndex = 0; setIndex < setCount; setIndex++) {
+            const cell = document.createElement('td');
+            cell.className = 'set-score';
+            if (setIndex < state.completedSets.length) {
+              cell.textContent = state.completedSets[setIndex][player];
+            } else if (!state.matchOver && setIndex === currentSetIndex) {
+              cell.textContent = state.games[player];
+              cell.classList.add('set-current');
+              cell.setAttribute('aria-label', `Aktueller Satz: ${state.games[player]} Spiele`);
+            } else {
+              cell.textContent = '–';
+            }
+            row.appendChild(cell);
+          }
+          tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+        el.setHistory.replaceChildren(table);
+      }
+
+      function completeSet(winner) {
+        state.completedSets.push([...state.games]);
+        state.sets[winner] += 1;
+        state.games = [0, 0];
+        state.points = [0, 0];
+        state.tiePoints = [0, 0];
+        state.tieBreak = false;
+
+        if (state.sets[winner] >= targetSets()) {
+          state.matchOver = true;
+          state.winner = winner;
+        }
+      }
+
+      function winGame(player) {
+        state.games[player] += 1;
+        state.points = [0, 0];
+
+        const other = 1 - player;
+        if (state.games[player] >= 6 && state.games[player] - state.games[other] >= 2) {
+          completeSet(player);
+          return;
+        }
+        if (state.games[0] === 6 && state.games[1] === 6) {
+          state.tieBreak = true;
+          state.tiePoints = [0, 0];
+        }
+      }
+
+      function addPoint(player) {
+        if (state.matchOver) return;
+        el.message.textContent = '';
+        const other = 1 - player;
+
+        if (state.tieBreak) {
+          state.tiePoints[player] += 1;
+          if (state.tiePoints[player] >= 7 && state.tiePoints[player] - state.tiePoints[other] >= 2) {
+            state.games[player] += 1; // 7–6 set score
+            completeSet(player);
+          }
+          render();
+          return;
+        }
+
+        state.points[player] += 1;
+        const p = state.points[player];
+        const o = state.points[other];
+        if (p >= 4 && p - o >= 2) winGame(player);
+        render();
+      }
+
+      function setFormat(bestOf) {
+        if (bestOf === state.bestOf) return;
+
+        // A best-of-3 match cannot faithfully represent a 2–2 or longer set score.
+        if (bestOf === 3 && (state.completedSets.length > 3 || (state.sets[0] >= 2 && state.sets[1] >= 2))) {
+          el.message.textContent = 'Dieser Spielstand kann nicht als 3-Satz-Match dargestellt werden. Bitte zuerst das Match zurücksetzen.';
+          return;
+        }
+
+        state.bestOf = bestOf;
+        state.matchOver = false;
+        state.winner = null;
+
+        const target = targetSets();
+        if (state.sets[0] >= target || state.sets[1] >= target) {
+          state.winner = state.sets[0] > state.sets[1] ? 0 : 1;
+          state.matchOver = state.sets[0] !== state.sets[1];
+        }
+        el.message.textContent = '';
+        render();
+      }
+
+      function resetMatch() {
+        if (!window.confirm('Das gesamte Match wirklich auf 0:0 zurücksetzen?')) return;
+        state.sets = [0, 0];
+        state.games = [0, 0];
+        state.points = [0, 0];
+        state.tieBreak = false;
+        state.tiePoints = [0, 0];
+        state.completedSets = [];
+        state.matchOver = false;
+        state.winner = null;
+        el.message.textContent = '';
+        render();
+      }
+
+      el.pointButtons[0].addEventListener('click', () => addPoint(0));
+      el.pointButtons[1].addEventListener('click', () => addPoint(1));
+      el.best3.addEventListener('click', () => setFormat(3));
+      el.best5.addEventListener('click', () => setFormat(5));
+      el.reset.addEventListener('click', resetMatch);
+      el.names.forEach((input) => input.addEventListener('input', render));
+      el.countries.forEach((select) => select.addEventListener('change', render));
+
+      populateCountrySelects();
+      restore();
+      render();
+    })();
+  </script>
+</body>
+</html>
