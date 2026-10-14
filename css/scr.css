@@ -250,6 +250,160 @@ small, .small {
 .btn-toggle:not(.collapsed) .icon-plus { display: none; }
 .btn-toggle:not(.collapsed) .icon-minus { display: inline; }
 
+/* Teaching & Supervision: compact year/entry tables */
+.table-entries td:first-child {
+  width: 78px;
+  white-space: nowrap;
+  color: var(--bs-secondary-color);
+  font-variant-numeric: tabular-nums;
+}
+.subgroup-label {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+.subgroup-label { margin: 6px 0 0 3px; }
+.subgroup-label:first-child { margin-top: 2px; }
+
+/* Professional Experience: horizontal timeline (oldest left, present right).
+   Below 992px it folds into a vertical list, newest first. */
+.htl,
+.htl ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.htl {
+  display: grid;
+  grid-template-columns: 2fr 4fr 2.3fr;
+  margin: 6px 0 4px;
+}
+.htl-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  margin-bottom: 9px;
+  padding-right: 12px;
+}
+.htl-head-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 0;
+}
+.htl-head-split > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 12px;
+}
+.htl-logo {
+  width: auto;
+  flex: none;
+}
+/* per-logo heights so the marks carry similar visual weight */
+.htl-logo-plus   { height: 28px; }
+.htl-logo-tttech { height: 13px; }
+.htl-logo-nxp    { height: 17px; }
+.htl-logo-dtu    { height: 26px; }
+.htl-org {
+  font-size: 11px;
+  line-height: 13px;
+  white-space: nowrap;
+  color: var(--bs-secondary-color);
+}
+.htl-roles {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border-top: 1px solid var(--bs-border-color);
+}
+.htl-now .htl-roles { border-top-color: #4A0000; }
+.htl-now .htl-roles::after {          /* arrowhead: still ongoing */
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -5px;
+  border: 4px solid transparent;
+  border-left: 7px solid #4A0000;
+  border-right: 0;
+}
+.htl-role {
+  position: relative;
+  padding: 15px 12px 0 0;
+}
+.htl-role::before {                   /* marker */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid #4A0000;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 1;
+}
+.htl-current::before { background: #4A0000; }
+/* concurrent appointment runs on a parallel lane just below the main track */
+.htl-lane2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5px;
+  height: 1px;
+  background: #4A0000;
+}
+.htl-lane2::before { top: 1px; }
+.htl-date {
+  font-size: 12px;
+  color: var(--bs-secondary-color);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.htl-title {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.htl-unit {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--bs-secondary-color);
+}
+@media (max-width: 991.98px) {
+  .htl {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  .htl-head,
+  .htl-head-split {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 6px 18px;
+    margin-bottom: 6px;
+    padding: 0;
+  }
+  .htl-roles {
+    display: flex;
+    flex-direction: column-reverse;
+    border-top: 0;
+    border-left: 1px solid var(--bs-border-color);
+    margin-left: 4px;
+  }
+  .htl-now .htl-roles { border-left-color: #4A0000; }
+  .htl-now .htl-roles::after { display: none; }
+  .htl-role { padding: 0 0 6px 18px; }
+  .htl-role::before,
+  .htl-lane2::before { left: -5px; top: 3px; }
+  .htl-lane2::after { display: none; }
+}
+
 /* Award highlight */
 .text-award { display: inline-block; background: #FDECEA; color: #8B1A1A; border: 1px solid #C0392B; border-radius: 4px; padding: 1px 6px; font-size: 0.8em; white-space: nowrap; }
 .text-award { transition: background 0.15s, border-color 0.15s, color 0.15s; }
@@ -265,6 +419,7 @@ small, .small {
 /* Icon color utilities */
 .icon-pdf      { color: #A00000; }
 .icon-bib      { color: #707070; }
+.icon-html     { color: #E18700; }
 .icon-ext      { color: #808000; }
 .icon-slides   { color: #1E8449; }
 .icon-media    { color: #0066CC; }
@@ -275,6 +430,7 @@ small, .small {
 /* 2 — publication icon hover: darken + slight scale */
 a:has(.icon-pdf):hover .icon-pdf           { color: #6B0000; }
 a:has(.icon-bib):hover .icon-bib           { color: #404040; }
+a:has(.icon-html):hover .icon-html         { color: #AF5500; }
 a:has(.icon-ext):hover .icon-ext           { color: #4B4B00; }
 a:has(.icon-slides):hover .icon-slides     { color: #0E5A2A; }
 a:has(.icon-media):hover .icon-media       { color: #003D80; }
@@ -324,3 +480,98 @@ a [class^="icon-"], a [class*=" icon-"] {
   }
 }
 
+
+/* Group prefix in section titles, e.g. "Academic Service: Invited Talks" */
+.h-group { color: var(--bs-secondary-color); }
+
+/* Citations: Scholar-style metrics table + per-year column chart (pure CSS).
+   Scale max is 450 citations; --v on each column is its value. */
+.cite-stats { font-size: 13px; max-width: 320px; }
+.cite-stats th,
+.cite-stats td { font-variant-numeric: tabular-nums; }
+.cite-stats thead th { font-weight: 400; color: var(--bs-secondary-color); text-align: right; }
+.cite-stats tbody td { text-align: right; }
+.cite-stats tbody th { font-weight: 400; }
+.cite-chart {
+  --cite-max: 450;
+  --cite-h: 130px;
+  padding-left: 30px;          /* room for y-axis ticks */
+}
+.cite-plot {
+  position: relative;
+  height: var(--cite-h);
+  /* hairline gridlines every 100 citations, anchored at the baseline */
+  background-image: linear-gradient(to top, #e9ecef 1px, transparent 1px);
+  background-size: 100% calc(var(--cite-h) * 100 / var(--cite-max));
+  background-position: left bottom;
+}
+.cite-ticks span {
+  position: absolute;
+  left: -30px;
+  width: 24px;
+  bottom: calc(var(--t) / var(--cite-max) * 100%);
+  transform: translateY(50%);
+  text-align: right;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--bs-secondary-color);
+  font-variant-numeric: tabular-nums;
+}
+.cite-bars,
+.cite-years {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+}
+.cite-bars { height: 100%; }
+.cite-col { position: relative; height: 100%; }
+.cite-bar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(24px, calc(100% - 2px));
+  height: calc(var(--v) / var(--cite-max) * 100%);
+  background: #4A0000;
+  border-radius: 4px 4px 0 0;
+}
+.cite-partial .cite-bar { background: rgba(74, 0, 0, 0.5); }
+.cite-val,
+.cite-col::after {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--v) / var(--cite-max) * 100% + 3px);
+  transform: translateX(-50%);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--bs-secondary-color);
+}
+/* hover tooltip with the exact value */
+.cite-col::after {
+  content: attr(data-tip);
+  display: none;
+  bottom: calc(var(--v) / var(--cite-max) * 100% + 4px);
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #2c3e50;
+  z-index: 2;
+}
+.cite-col:hover::after { display: block; }
+.cite-col:hover .cite-val { visibility: hidden; }
+.cite-years {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--bs-secondary-color);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.cite-chart figcaption {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--bs-secondary-color);
+}
+@media (max-width: 991.98px) {
+  .cite-years .cite-odd { visibility: hidden; }   /* label every other year */
+}
