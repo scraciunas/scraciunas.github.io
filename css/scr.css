@@ -276,7 +276,7 @@ small, .small {
 }
 .htl {
   display: grid;
-  grid-template-columns: 2fr 4fr 2.3fr;
+  grid-template-columns: 1.2fr 2fr 4fr 2.3fr;
   margin: 6px 0 4px;
 }
 .htl-head {
@@ -303,6 +303,7 @@ small, .small {
   flex: none;
 }
 /* per-logo heights so the marks carry similar visual weight */
+.htl-logo-namics { height: 24px; }
 .htl-logo-plus   { height: 28px; }
 .htl-logo-tttech { height: 13px; }
 .htl-logo-nxp    { height: 17px; }
