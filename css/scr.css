@@ -84,7 +84,12 @@ hr.new3 {
   border-top: 1.5px dashed;
   color: #4A0000;
 }
-
+.profile-icon {
+    width: 15px;
+    height: 15px;
+    vertical-align: -2px;
+    object-fit: contain;
+}
 /* 7 — smooth color transition on all links */
 a {
   color: #006699;
